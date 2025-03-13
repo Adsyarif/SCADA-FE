@@ -6,7 +6,7 @@ export function Button(props: ButtonProps) {
     return (
         <button
             className={twMerge(
-                "rounded-[10px] py-3 bg-blue-200 w-full hover: bg-blue-100 fonrt-semibold text-white", containerClassName
+                "rounded-[10px] py-3 bg-blue-800 w-full hover:bg-blue-700 font-semibold text-white", containerClassName
             )}
             {...rest}
         >

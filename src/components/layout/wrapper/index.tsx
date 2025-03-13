@@ -1,6 +1,6 @@
 import { BottomMenu, LayoutProps, Topbar } from "@/components";
 
-export default function Layout({children}: LayoutProps) {
+export function Layout({children}: LayoutProps) {
     return (
         <div>
             <Topbar />

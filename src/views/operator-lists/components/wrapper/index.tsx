@@ -1,4 +1,4 @@
-import { SearchBar, Title } from "@/components";
+import { ContactItem, SearchBar, Title } from "@/components";
 
 const OperatorListWrapper = () => {
   return (
@@ -10,7 +10,7 @@ const OperatorListWrapper = () => {
           apiEndPoint=""
           onResult={(data) => console.log(data)}
         />
-        {/* List of operator */}
+        <ContactItem />
       </div>
     </div>
   );

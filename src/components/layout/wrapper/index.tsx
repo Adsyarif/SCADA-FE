@@ -6,7 +6,7 @@ export function Layout({ children }: LayoutProps) {
       <div className="sticky top-0 z-50">
         <Topbar />
       </div>
-      <main className="flex-grow">{children}</main>
+      <main className="flex grow">{children}</main>
       <div className="sticky bottom-0 z-50">
         <BottomMenu />
       </div>

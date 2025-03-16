@@ -1,11 +1,5 @@
 import { Search, Title } from "@/components";
 
-interface dataOperatorProps {
-  name: string;
-  position: string;
-  report: () => string;
-}
-
 const OperatorListWrapper = () => {
   return (
     <div className="flex grow">

@@ -1,10 +1,11 @@
-import { ContactItem } from "@/components";
+import ContactItem from "../contactItem/";
 import { LucideLoader, LucideSearch } from "lucide-react";
 import { useState } from "react";
 
 interface SearchProps {
   placeholder: string;
   apiEndPoint: string;
+  type: string;
 }
 
 interface dataOperatorProps {
@@ -13,7 +14,7 @@ interface dataOperatorProps {
   report: () => string;
 }
 
-const Search = ({ placeholder, apiEndPoint }: SearchProps) => {
+const Search = ({ placeholder, apiEndPoint, type }: SearchProps) => {
   const [item, setItem] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showData, setShowData] = useState<dataOperatorProps[]>([]);
@@ -85,7 +86,7 @@ const Search = ({ placeholder, apiEndPoint }: SearchProps) => {
               />
             ))
           : !error && (
-              <p className="text-gray-500">Tidak ada operator ditemukan.</p>
+              <p className="text-gray-500">Tidak ada {type} ditemukan.</p>
             )}
       </div>
     </>

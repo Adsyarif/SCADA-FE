@@ -15,7 +15,7 @@ export function ReportCase() {
 
         if (!event.target.files?.[0]) return
         const file = event.target.files[0];
-        // Example: read file data
+        
         const reader = new FileReader();
         reader.onload = () => {
             if (typeof reader.result === 'string') {
@@ -25,7 +25,7 @@ export function ReportCase() {
         reader.readAsDataURL(file);
     }
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full pt-16">
             <form id={"action"} className={"grow"}>
                 <div className="w-full flex justify-center">
                     <h1 className={"text-2xl font-semibold p-4"}>Buat Laporan</h1>
@@ -53,11 +53,11 @@ export function ReportCase() {
                     <div>
                         <div className="flex gap-2 py-2">
                             {fileName && (
-                                <div className="flex gap-2 w-32 truncate">
+                                <div className="flex gap-2 w-32">
+                                    <p className="truncate">{fileName}</p>
                                     <button
                                         onClick={()=> setFileName("")}
                                     ><XIcon className="cursor-pointer"/></button>
-                                    <p>{fileName}</p>
                                 </div>
                             )}
                             
@@ -71,7 +71,7 @@ export function ReportCase() {
                 </div>
                 <div className="flex gap-4 p-4">
                     <Button>Kirim</Button>
-                    <Button>Batal</Button>
+                    <Button containerClassName="bg-white border text-black">Batal</Button>
                 </div>
             </form>
         </div>

@@ -43,7 +43,7 @@ interface MessageProps {
   text: string;
 }
 
-export const createUserDocumentFromAuth = async (
+export const createUserLogMessage = async (
   logMail: logMailProps,
   addtionalInformation = {}
 ) => {

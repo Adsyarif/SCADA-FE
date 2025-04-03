@@ -16,7 +16,6 @@ console.log(axiosInstance)
 axiosInstance.interceptors.request.use(
     (config) => {
         const auth = Cookies.get(token);
-        // const token = localStorage.getItem('authToken');
 
         if (auth) { config.headers.Authorization = `Bearer ${auth}`;
         console.log('Token is saved:', auth);

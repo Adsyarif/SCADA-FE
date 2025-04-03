@@ -1,6 +1,6 @@
 import { Button, Dropdown } from "@/components";
 import { ImgUpload } from "@/components/base/img-upload-btn";
-import { ImagePlus, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import { useState } from "react";
 
 export function ReportCase() {

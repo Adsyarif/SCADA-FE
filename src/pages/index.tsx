@@ -1,5 +1,3 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
 import LoginWrapper from "@/views/auth/components/wrapper";
 
 export default function Home() {

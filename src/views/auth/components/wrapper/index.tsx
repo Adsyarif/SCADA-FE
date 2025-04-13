@@ -20,34 +20,42 @@ export default function LoginWrapper() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
 
-  const { mutate, isPending } = useMutation<
-    SignInResponse | undefined, 
-    Error,                     
-    LoginFormValues,            
-    unknown                     
-  >({
-    mutationFn: async (data: LoginFormValues) => {
-      const res = await signIn("credentials", {
-        redirect: false,
-        email: data.email,
-        password: data.password,
-      });
-      if (res?.error) {
-        throw new Error(res.error);
-      }
-      return res;
-    },
-    onSuccess: () => {
-      router.push("/homepage");
-    },
-    onError: (error: Error) => {
-      console.error("Login failed:", error.message);
-    },
-  });
+  const { mutate, isPending, isError, error } = useMutation<
+  SignInResponse,    
+  Error,             
+  LoginFormValues    
+>({
+  mutationFn: async (data) => {
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
+
+    if (!res) {
+      throw new Error("Unexpected signIn result");
+    }
+
+    if (res.error) {
+      throw new Error(res.error);
+    }
+
+    return res;
+  },
+  onSuccess: () => {
+    const dest = (router.query.callbackUrl as string) || "/homepage";
+    router.push(dest);
+  },
+  onError: (err) => {
+    setError("password", { type: "manual", message: err.message });
+  },
+});
+
 
   const onSubmit = (data: LoginFormValues) => {
     mutate(data);
@@ -67,7 +75,11 @@ export default function LoginWrapper() {
             <Input label="Password" type="password" {...register("password")} />
             {errors.password && <p className="text-red-500">{errors.password.message}</p>}
           </div>
-          <Link href="/forgot-password">Forgot Password?</Link>
+
+          <Link href="/forgot-password" className="text-sm text-blue-600">
+            Forgot Password?
+          </Link>
+
           <Button type="submit" disabled={isPending}>
             {isPending ? "Signing In..." : "Sign In"}
           </Button>

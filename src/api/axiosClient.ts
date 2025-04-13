@@ -1,32 +1,22 @@
-import { token } from "@/config";
-import axios from "axios";
-import Cookies from "js-cookie";
+import axios from 'axios';
+import { getSession } from 'next-auth/react';
 
-
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
-export const axiosInstance = axios.create({
-    baseURL : baseUrl,
-    headers: {
-        'Content-Type': 'application/json',
-    },
+const axiosInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 });
 
-console.log(axiosInstance)
 axiosInstance.interceptors.request.use(
-    (config) => {
-        const auth = Cookies.get(token);
-
-        if (auth) { config.headers.Authorization = `Bearer ${auth}`;
-        console.log('Token is saved:', auth);
-        }  else {
-            console.warn("token not found")
-        } 
-        return config;
-
-    },
-    (error) => {
-        console.error("Request error:", error);
-        return Promise.reject(error);
+  async (config) => {
+    const session = await getSession();
+    const token = session?.accessToken;
+    if (token) {
+      config.headers = config.headers ?? {};
+      const headers = config.headers as Record<string, string>;
+      headers['Authorization'] = `Bearer ${token}`;
     }
-)
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+export default axiosInstance;

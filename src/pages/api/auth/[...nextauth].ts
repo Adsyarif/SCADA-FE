@@ -1,70 +1,82 @@
-import { axiosInstance } from "@/api/axiosClient";
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-
-type LoginResponse = {
-  access_token: string;
-  user: {
-    id: string;
-    email: string;
-    permissions: string[];
-  };
-};
-
-type AuthUser = {
-  id: string;
-  email: string;
-  permissions: string[];
-  accessToken: string;
-};
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import axios from 'axios';
 
 export default NextAuth({
+  debug: true,  // ← enable verbose logs
+
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Email & Password',
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "example@example.com" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         try {
-          const res = await axiosInstance.post<LoginResponse>("/auth/login", {
-            email: credentials?.email,
-            password: credentials?.password,
-          });
-          const data = res.data;
-          if (data && data.access_token && data.user) {
-            return { 
-              ...data.user, 
-              accessToken: data.access_token 
-            } as AuthUser;
+          console.log('→ authorize() got:', credentials);
+
+          // 1) Call NestJS /auth/login
+          const loginRes = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+            {
+              email: credentials?.email,
+              password: credentials?.password,
+            }
+          );
+          console.log('← /auth/login response:', loginRes.data);
+
+          const token = loginRes.data.access_token;
+          if (!token) {
+            console.error('✖ no access_token in loginRes');
+            return null;
           }
-          return null;
-        } catch (error) {
-          console.error("Error authorizing:", error);
+
+          // 2) Call NestJS /auth/me
+          const meRes = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          console.log('← /auth/me response:', meRes.data);
+
+          // 3) Return a user object for NextAuth
+          return {
+            id: meRes.data.id,
+            name: meRes.data.username,
+            email: meRes.data.email,    // make sure your /auth/me returns this!
+            role: meRes.data.role,
+            perms: meRes.data.perms,
+            accessToken: token,
+          };
+        } catch (err: any) {
+          console.error('✖ authorize() error:', err.response?.data || err.message);
           return null;
         }
       },
     }),
   ],
+
+  session: { strategy: 'jwt' },
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.accessToken = (user as AuthUser).accessToken;
-        token.user = user;
+        token.accessToken = user.accessToken;
+        token.id = user.id;
+        token.email = user.email;
+        token.role = user.role;
+        token.perms = user.perms;
       }
       return token;
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken as string;
-      session.user = token.user as AuthUser;
+      session.user.id = token.id as string;
+      session.user.name = token.name as string;
+      session.user.email = token.email as string;
+      session.user.role = token.role as string;
+      session.user.perms = token.perms as string[];
       return session;
     },
-  },
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    signIn: "/",
   },
 });

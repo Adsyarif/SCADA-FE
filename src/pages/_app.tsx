@@ -16,11 +16,6 @@ type AppPropsWithLayout = AppProps & {
 export default function MyApp({ Component, pageProps: { session, ...pageProps} }: AppPropsWithLayout) {
     const getLayout = Component.getLayout ?? ((page) => page);
     const [queryClient] = useState(() => new QueryClient())
-
-    let WrappedComponent = Component;
-    if (Component.requiredPermission) {
-        WrappedComponent = withPermission(Component, { requiredPermission: Component.requiredPermission})
-    }
     return getLayout(
         <SessionProvider session={session}>
             <QueryClientProvider client={queryClient}>

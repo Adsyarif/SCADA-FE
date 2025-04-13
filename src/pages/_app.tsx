@@ -1,17 +1,32 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import { AppProps } from "next/app";
 import "@/styles/globals.css";
+import { SessionProvider } from "next-auth/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 type NextPageWithLayout = {
     getLayout?: (page: ReactElement) => ReactNode;
+    requiredPermission: string;
 } & AppProps["Component"];
 
 type AppPropsWithLayout = AppProps & {
     Component: NextPageWithLayout;
 };
 
-export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+export default function MyApp({ Component, pageProps: { session, ...pageProps} }: AppPropsWithLayout) {
     const getLayout = Component.getLayout ?? ((page) => page);
-    console.log("getLayout called for");
-    return getLayout(<Component {...pageProps} />);
+    const [queryClient] = useState(() => new QueryClient())
+
+    let WrappedComponent = Component;
+    if (Component.requiredPermission) {
+        WrappedComponent = withPermission(Component, { requiredPermission: Component.requiredPermission})
+    }
+    return getLayout(
+        <SessionProvider session={session}>
+            <QueryClientProvider client={queryClient}>
+                <Component {...pageProps} />
+            </QueryClientProvider>
+        </SessionProvider>
+    
+    );
 }

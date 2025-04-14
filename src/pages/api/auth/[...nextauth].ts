@@ -14,9 +14,7 @@ export default NextAuth({
       },
       async authorize(credentials) {
         try {
-          console.log('→ authorize() got:', credentials);
-
-          // 1) Call NestJS /auth/login
+          // console.log('→ authorize() got:', credentials);
           const loginRes = await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
             {
@@ -24,22 +22,20 @@ export default NextAuth({
               password: credentials?.password,
             }
           );
-          console.log('← /auth/login response:', loginRes.data);
+          // console.log('← /auth/login response:', loginRes.data);
 
           const token = loginRes.data.access_token;
           if (!token) {
-            console.error('✖ no access_token in loginRes');
+            // console.error('✖ no access_token in loginRes');
             return null;
           }
 
-          // 2) Call NestJS /auth/me
           const meRes = await axios.get(
             `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
-          console.log('← /auth/me response:', meRes.data);
+          // console.log('← /auth/me response:', meRes.data);
 
-          // 3) Return a user object for NextAuth
           return {
             id: meRes.data.id,
             name: meRes.data.username,
@@ -49,7 +45,7 @@ export default NextAuth({
             accessToken: token,
           };
         } catch (err: any) {
-          console.error('✖ authorize() error:', err.response?.data || err.message);
+          // console.error('✖ authorize() error:', err.response?.data || err.message);
           return null;
         }
       },

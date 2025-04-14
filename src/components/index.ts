@@ -5,3 +5,4 @@ export * from "./menu-items";
 export * from "./confirmBox";
 export * from "./resultResponse";
 export * from "./schedule-list";
+export * from "./table/component";

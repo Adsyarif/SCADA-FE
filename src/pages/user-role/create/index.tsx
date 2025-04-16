@@ -1,14 +1,14 @@
 import { Layout } from "@/components";
 import { requirePermissions } from "@/lib/ssrAuth";
-import { UserRoleWrapper } from "@/views";
+import { UserRoleForm } from "@/views";
 import React from "react";
 
-export default function Index() {
+export default function CreateRole() {
     return (
-        <UserRoleWrapper />
+        <UserRoleForm />
     )
 }
 
-Index.getLayout = (page: React.ReactNode) => {
+CreateRole.getLayout = (page: React.ReactNode) => {
     return <Layout>{page}</Layout>
 }

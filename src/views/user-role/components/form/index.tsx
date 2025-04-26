@@ -38,7 +38,7 @@ export function UserRoleForm() {
     mutationFn: (data) => axiosInstance.post('/user-role', data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['roles']});
-      router.push('/roles');
+      router.push('/user-role');
     },
   });
 

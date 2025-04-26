@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import axiosInstance from '@/api/axiosClient';
 import type { AxiosResponse } from 'axios';
 import { RoleFormData, roleSchema } from '../../schema';
+import { Button, Input } from '@/components';
 
 type Permission = { id: string; permissionName: string };
 
@@ -50,13 +51,13 @@ export function UserRoleForm() {
     return console.log(`Error loading perms: ${permsError.message}`)
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)} className="max-w-lg mx-auto p-6 space-y-6">
+    <div className="w-full">
+      <form onSubmit={handleSubmit(onSubmit)} className="mx-auto p-6 space-y-6">
       <div>
         <label htmlFor="roleName" className="block font-medium">
           Role Name
         </label>
-        <input
+        <Input
           id="roleName"
           {...register('roleName')}
           className="mt-1 w-full border p-2 rounded"
@@ -70,7 +71,7 @@ export function UserRoleForm() {
       {/* Permissions */}
       <div>
         <p className="font-medium">Permissions</p>
-        <div className="mt-2 max-h-60 overflow-y-auto border p-3 rounded space-y-2">
+        <div className="mt-2 overflow-y-auto p-3 rounded space-y-2">
           {perms!.map((p) => (
             <label key={p.id} className="flex items-center">
               <input
@@ -89,13 +90,13 @@ export function UserRoleForm() {
       </div>
 
       {/* Submit */}
-      <button
+      <Button
         type="submit"
         disabled={createRole.isPending}
         className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
       >
         {createRole.isPending ? 'Saving…' : 'Save Role'}
-      </button>
+      </Button>
       {createRole.isError && (
         <p className="text-red-600 mt-2">{createRole.error.message}</p>
       )}

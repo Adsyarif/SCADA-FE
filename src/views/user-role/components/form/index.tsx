@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import axiosInstance from '@/api/axiosClient';
 import type { AxiosResponse } from 'axios';
 import { RoleFormData, roleSchema } from '../../schema';
-import { Button, Input } from '@/components';
+import { Button, Input, Title } from '@/components';
 
 type Permission = { id: string; permissionName: string };
 
@@ -52,6 +52,8 @@ export function UserRoleForm() {
 
   return (
     <div className="w-full">
+       <Title isButton text="Create User Roles" />
+  
       <form onSubmit={handleSubmit(onSubmit)} className="mx-auto p-6 space-y-6">
       <div>
         <label htmlFor="roleName" className="block font-medium">

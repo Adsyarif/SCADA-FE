@@ -1,8 +1,16 @@
 import { Indicator, MenuItems } from "@/components";
-import { Calendar1, CalendarCheck, File, Laptop2, User, User2Icon, Users, UserSquare2, Wallet } from "lucide-react";
+import { Calendar1, CalendarCheck, File, Laptop2, Rss, ScanEye, Settings, User, User2Icon, UserPen, Users, UserSquare2, Wallet } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 export function HomepageWrapper () {
+    const { data: session } = useSession()
+    const userPermissions = session?.user?.permissions || []
+
+    const checkPermission = (permission: string) => {
+        return userPermissions.includes(permission)
+    }
+
     return (
         <div className="flex flex-col">
             <div className="grow flex flex-col">
@@ -33,14 +41,39 @@ export function HomepageWrapper () {
             </div>
             <div className="grow bg-gray-200">
                 <div className="grid grid-cols-4 gap-4 text-xs justify-items-center align-center p-8">
+                    {checkPermission("manage:schedule") && (
                     <MenuItems href="/" menuName="Lihat Jadwal"><Calendar1 /></MenuItems>
+                    )}
+                    {checkPermission("staff:attendance") && (
                     <MenuItems href="/" menuName="Absensi"><CalendarCheck /></MenuItems>
+                    )}
+                    {checkPermission("create:reports") && (
                     <MenuItems href="/" menuName="Buat Laporan"><File /></MenuItems>
+                    )}
+                    {checkPermission("view:operators") && (
                     <MenuItems href="/" menuName="Daftar Operator"><UserSquare2 /></MenuItems>
+                    )}
+                    {checkPermission("reporting") && (
                     <MenuItems href="/" menuName="Laporan Keuangan"><Wallet /></MenuItems>
-                    <MenuItems href="/" menuName="Manajemen User Role"><Users /></MenuItems>
+                    )}
+                    {checkPermission("manage:roles") && (
+                    <MenuItems href="/user-role" menuName="Manajemen User Role"><Users /></MenuItems>
+                    )}
+                    {checkPermission("manage:users") && (
                     <MenuItems href="/" menuName="Daftar User"><User2Icon /></MenuItems>
+                    )}
+                    {checkPermission("manage:rtu-site") && (
                     <MenuItems href="/" menuName="Konfigurasi RTU"><Laptop2 /></MenuItems>
+                    )}
+                    {checkPermission("manage:permissions") && (
+                    <MenuItems href="/" menuName="Manajemen Permissions"><ScanEye /></MenuItems>
+                    )}
+                    {checkPermission("manage:content") && (
+                    <MenuItems href="/" menuName="Manajemen Konten"><Rss /></MenuItems>
+                    )}
+                    {checkPermission("manage:settings") && (
+                    <MenuItems href="/" menuName="Pengaturan"><Settings /></MenuItems>
+                    )}
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import { Bell, HouseIcon, Mail, User } from "lucide-react";
+import { Bell, HouseIcon, Mail, SquareArrowRightIcon, User } from "lucide-react";
 import Link from "next/link";
 
 export function BottomMenu() {
@@ -8,6 +8,7 @@ export function BottomMenu() {
             <Link href="/"><Mail /></Link>
             <Link href="/"><Bell/></Link>
             <Link href="/"><User /></Link>
+            <Link href="/"><SquareArrowRightIcon /></Link>
         </div>
     )
 }

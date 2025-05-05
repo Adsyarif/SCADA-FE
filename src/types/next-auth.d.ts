@@ -9,14 +9,14 @@ declare module 'next-auth' {
       name: string;
       email: string;
       role: string;
-      perms: string[];
+      permissions: string[];
     };
   }
 
   interface User extends DefaultUser {
     id: string;
     role: string;
-    perms: string[];
+    permissions: string[];
     accessToken: string;
   }
 }
@@ -27,6 +27,6 @@ declare module 'next-auth/jwt' {
     id: string;
     name: string;
     role: string;
-    perms: string[];
+    permissions: string[];
   }
 }

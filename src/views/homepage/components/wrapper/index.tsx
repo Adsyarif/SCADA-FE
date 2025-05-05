@@ -1,5 +1,5 @@
 import { Indicator, MenuItems } from "@/components";
-import { Calendar, Calendar1, CalendarCheck, File, User, UserSquare2, Wallet } from "lucide-react";
+import { Calendar1, CalendarCheck, File, Laptop2, User, User2Icon, Users, UserSquare2, Wallet } from "lucide-react";
 import Link from "next/link";
 
 export function HomepageWrapper () {
@@ -37,7 +37,10 @@ export function HomepageWrapper () {
                     <MenuItems href="/" menuName="Absensi"><CalendarCheck /></MenuItems>
                     <MenuItems href="/" menuName="Buat Laporan"><File /></MenuItems>
                     <MenuItems href="/" menuName="Daftar Operator"><UserSquare2 /></MenuItems>
-                    <MenuItems href="/" menuName="Laporan Keurangan"><Wallet /></MenuItems>
+                    <MenuItems href="/" menuName="Laporan Keuangan"><Wallet /></MenuItems>
+                    <MenuItems href="/" menuName="Manajemen User Role"><Users /></MenuItems>
+                    <MenuItems href="/" menuName="Daftar User"><User2Icon /></MenuItems>
+                    <MenuItems href="/" menuName="Konfigurasi RTU"><Laptop2 /></MenuItems>
                 </div>
             </div>
         </div>

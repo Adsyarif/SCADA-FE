@@ -3,7 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import axios from 'axios';
 
 export default NextAuth({
-  debug: true,  // ← enable verbose logs
+  debug: true,
 
   providers: [
     CredentialsProvider({
@@ -14,7 +14,6 @@ export default NextAuth({
       },
       async authorize(credentials) {
         try {
-          // console.log('→ authorize() got:', credentials);
           const loginRes = await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
             {
@@ -22,11 +21,10 @@ export default NextAuth({
               password: credentials?.password,
             }
           );
-          // console.log('← /auth/login response:', loginRes.data);
 
           const token = loginRes.data.access_token;
           if (!token) {
-            // console.error('✖ no access_token in loginRes');
+
             return null;
           }
 
@@ -34,18 +32,16 @@ export default NextAuth({
             `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
-          // console.log('← /auth/me response:', meRes.data);
 
           return {
             id: meRes.data.id,
             name: meRes.data.username,
-            email: meRes.data.email,    // make sure your /auth/me returns this!
+            email: meRes.data.email,
             role: meRes.data.role,
-            perms: meRes.data.perms,
+            permissions: meRes.data.permissions,
             accessToken: token,
           };
         } catch (err: any) {
-          // console.error('✖ authorize() error:', err.response?.data || err.message);
           return null;
         }
       },
@@ -61,7 +57,7 @@ export default NextAuth({
         token.id = user.id;
         token.email = user.email;
         token.role = user.role;
-        token.perms = user.perms;
+        token.permissions = user.permissions;
       }
       return token;
     },
@@ -71,7 +67,7 @@ export default NextAuth({
       session.user.name = token.name as string;
       session.user.email = token.email as string;
       session.user.role = token.role as string;
-      session.user.perms = token.perms as string[];
+      session.user.permissions = token.permissions as string[];
       return session;
     },
   },

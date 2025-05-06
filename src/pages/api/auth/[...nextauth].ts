@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 
 export default NextAuth({
   debug: true,
@@ -24,20 +25,20 @@ export default NextAuth({
           if (!token) {
             return null;
           }
+         
+          const decodedToken = jwtDecode(token)
+          const userId = decodedToken.sub as string; 
+          console.log(`Decoded token:`, decodedToken);
 
-          const meRes = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
           return {
-            id: meRes.data.id,
-            name: meRes.data.username,
-            email: meRes.data.email,
-            role: meRes.data.role,
-            permissions: meRes.data.permissions,
             accessToken: token,
-          };
-        } catch (err: any) {
+            id: userId,
+            email: decodedToken.email,
+            name: decodedToken.username,
+            role: decodedToken.role,
+            permissions: decodedToken.permissions,
+          }
+        } catch (error: any) {
           return null;
         }
       },

@@ -30,3 +30,13 @@ declare module 'next-auth/jwt' {
     permissions: string[];
   }
 }
+
+declare module 'jwt-decode' {
+  export interface JwtPayload {
+    sub: string;
+    email: string;
+    username: string;
+    role: string;
+    permissions: string[];
+  }
+}

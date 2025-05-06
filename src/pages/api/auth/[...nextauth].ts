@@ -4,7 +4,6 @@ import axios from 'axios';
 
 export default NextAuth({
   debug: true,
-
   providers: [
     CredentialsProvider({
       name: 'Email & Password',
@@ -21,10 +20,8 @@ export default NextAuth({
               password: credentials?.password,
             }
           );
-
           const token = loginRes.data.access_token;
           if (!token) {
-
             return null;
           }
 
@@ -32,7 +29,6 @@ export default NextAuth({
             `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
-
           return {
             id: meRes.data.id,
             name: meRes.data.username,

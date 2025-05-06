@@ -85,8 +85,7 @@ export function UserRoleWrapper() {
                 onView={handleView}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
-              />
-              
+              />  
             </>
           )}
         </div>

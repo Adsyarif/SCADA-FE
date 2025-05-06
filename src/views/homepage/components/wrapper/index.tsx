@@ -6,6 +6,7 @@ import Link from "next/link";
 export function HomepageWrapper () {
     const { data: session } = useSession()
     const userPermissions = session?.user?.permissions || []
+    console.log(`ini isi dari dari userPermissions: `, userPermissions)
 
     const checkPermission = (permission: string) => {
         return userPermissions.includes(permission)
@@ -63,7 +64,7 @@ export function HomepageWrapper () {
                     <MenuItems href="/" menuName="Daftar User"><User2Icon /></MenuItems>
                     )}
                     {checkPermission("manage:rtu-site") && (
-                    <MenuItems href="/" menuName="Konfigurasi RTU"><Laptop2 /></MenuItems>
+                    <MenuItems href="/rtu-configuration" menuName="Konfigurasi RTU"><Laptop2 /></MenuItems>
                     )}
                     {checkPermission("manage:permissions") && (
                     <MenuItems href="/" menuName="Manajemen Permissions"><ScanEye /></MenuItems>

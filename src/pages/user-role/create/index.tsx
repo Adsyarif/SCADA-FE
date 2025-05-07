@@ -1,11 +1,13 @@
 import { Layout } from "@/components";
-import { requirePermissions } from "@/lib/ssrAuth";
+import withAuth from "@/lib/withAuth";
 import { UserRoleForm } from "@/views";
 import React from "react";
 
+const ProtectedUserRoleForm = withAuth(UserRoleForm, ['manage:roles']);
+
 export default function CreateRole() {
     return (
-        <UserRoleForm />
+        <ProtectedUserRoleForm />
     )
 }
 

@@ -32,8 +32,7 @@ declare module 'next-auth/jwt' {
 }
 
 declare module 'jwt-decode' {
-  export interface JwtPayload {
-    sub: string;
+  interface JwtPayload extends UserData {
     email: string;
     username: string;
     role: string;

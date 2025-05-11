@@ -31,7 +31,7 @@ export function requirePermissions<T extends Record<string, any>>({
       };
     }
 
-    const userPerms = session.user.perms || [];
+    const userPerms = session.user.permissions || [];
     const hasAll = perms.every((p) => userPerms.includes(p));
     if (!hasAll) {
       if (!unauthorizedRedirect) {

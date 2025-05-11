@@ -1,10 +1,10 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 
 export default NextAuth({
-  debug: true,  // ← enable verbose logs
-
+  debug: true,
   providers: [
     CredentialsProvider({
       name: 'Email & Password',
@@ -14,7 +14,6 @@ export default NextAuth({
       },
       async authorize(credentials) {
         try {
-          // console.log('→ authorize() got:', credentials);
           const loginRes = await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
             {
@@ -22,30 +21,24 @@ export default NextAuth({
               password: credentials?.password,
             }
           );
-          // console.log('← /auth/login response:', loginRes.data);
-
           const token = loginRes.data.access_token;
           if (!token) {
-            // console.error('✖ no access_token in loginRes');
             return null;
           }
-
-          const meRes = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          // console.log('← /auth/me response:', meRes.data);
+         
+          const decodedToken = jwtDecode(token)
+          const userId = decodedToken.sub as string; 
+          console.log(`Decoded token:`, decodedToken);
 
           return {
-            id: meRes.data.id,
-            name: meRes.data.username,
-            email: meRes.data.email,    // make sure your /auth/me returns this!
-            role: meRes.data.role,
-            perms: meRes.data.perms,
             accessToken: token,
-          };
-        } catch (err: any) {
-          // console.error('✖ authorize() error:', err.response?.data || err.message);
+            id: userId,
+            email: decodedToken.email,
+            name: decodedToken.username,
+            role: decodedToken.role,
+            permissions: decodedToken.permissions,
+          }
+        } catch (error: any) {
           return null;
         }
       },
@@ -61,7 +54,7 @@ export default NextAuth({
         token.id = user.id;
         token.email = user.email;
         token.role = user.role;
-        token.perms = user.perms;
+        token.permissions = user.permissions;
       }
       return token;
     },
@@ -71,7 +64,7 @@ export default NextAuth({
       session.user.name = token.name as string;
       session.user.email = token.email as string;
       session.user.role = token.role as string;
-      session.user.perms = token.perms as string[];
+      session.user.permissions = token.permissions as string[];
       return session;
     },
   },

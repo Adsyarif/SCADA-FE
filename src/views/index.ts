@@ -7,3 +7,4 @@ export * from "./report-case";
 export * from "./operator-schedule";
 export * from "./user-role";
 export * from "./user-management";
+export * from "./rtu-configuration";

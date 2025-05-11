@@ -36,8 +36,6 @@ export function UserRoleWrapper() {
             .then((res) => res.data)
       });
 
-      
-    
       const tableData: UserRole[] = paginated
       ? paginated.data.map((r) => ({
           id: r.id,
@@ -87,35 +85,7 @@ export function UserRoleWrapper() {
                 onView={handleView}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
-              />
-  
-              <div className="flex justify-between items-center mt-4">
-                <button
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                  className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                  Previous
-                </button>
-  
-                <span>
-                  Page {paginated?.page ?? page} of {paginated?.totalPages ?? 1}
-                </span>
-  
-                <button
-                  onClick={() =>
-                    setPage((p) =>
-                      paginated
-                        ? Math.min(paginated.totalPages, p + 1)
-                        : p + 1
-                    )
-                  }
-                  disabled={page === (paginated?.totalPages ?? 1)}
-                  className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                  Next
-                </button>
-              </div>
+              />  
             </>
           )}
         </div>

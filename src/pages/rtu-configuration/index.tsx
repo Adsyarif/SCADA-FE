@@ -1,12 +1,10 @@
 import { Layout } from "@/components";
-import withAuth from "@/lib/withAuth";
-import { UserRoleWrapper } from "@/views";
 import React from "react";
+import {RTUConfigurationWrapper} from "@/views";
 
-const ProtectedUserRoleWrapper = withAuth(UserRoleWrapper, ['manage:roles']);
 export default function Index() {
     return (
-        <ProtectedUserRoleWrapper />
+        <RTUConfigurationWrapper />
     )
 }
 

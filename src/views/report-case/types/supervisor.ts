@@ -1,8 +1,8 @@
 export interface SupervisorsInterface {
-  data: SupervisorInterface[];
+  data: SupervisorInterface;
 }
 
 export interface SupervisorInterface {
-  categoryId: string;
-  categoryName: string;
+  supervisorId: string;
+  superVisorName: string;
 }

@@ -6,26 +6,26 @@ import { useAsignedSupervisor, useReportCategory } from "../../hooks";
 import { useSession } from "next-auth/react";
 
 export function ReportCase() {
-  const { data: session } = useSession();
-  const staffId = session?.user?.id;
   const [selectedValue, setSelectedValue] = useState("");
   const [fileName, setFileName] = useState("");
 
-  const { data: categories, isLoading, error } = useReportCategory();
-  const reportCategories = categories?.data;
-  console.log(staffId);
+  const { data: session } = useSession();
+  const staffId = session?.user?.id;
+
   const {
     data: supervisor,
     isLoading: superVisorLoading,
     error: supervisorError,
   } = useAsignedSupervisor(staffId!);
 
-  console.log(supervisor);
+  console.log(supervisor?.data.superVisorName);
+
+  const { data: categories, isLoading, error } = useReportCategory();
+  const reportCategories = categories?.data;
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
   const options = reportCategories!?.map((cat) => cat.categoryName);
-  console.log(options);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -52,7 +52,7 @@ export function ReportCase() {
         <div className={"flex flex-col justify-start items-start gap-4 m-4"}>
           <div className="flex flex-col">
             <span>Kepada:</span>
-            <span>{"Bpk. Bambang"}</span> {/*get user supervisor */}
+            <span>{supervisor?.data.superVisorName}</span>
           </div>
           <div>
             <Dropdown
@@ -60,11 +60,6 @@ export function ReportCase() {
               value={selectedValue}
               onValueChange={(val) => setSelectedValue(val)}
             />
-          </div>
-          <div>
-            {reportCategories?.map((category) => (
-              <div key={category.categoryId}>{category.categoryName}</div>
-            ))}
           </div>
         </div>
         <div className="flex flex-col p-4">

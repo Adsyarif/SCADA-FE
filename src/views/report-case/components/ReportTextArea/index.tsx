@@ -1,16 +1,22 @@
 interface ReportTextareaProps {
-  inputRef: React.RefObject<HTMLTextAreaElement | null>;
+  value: string;
+  onChange: (val: string) => void;
 }
 
-const ReportTextarea = ({ inputRef }: ReportTextareaProps) => {
-  return (
+const ReportTextarea = ({ value, onChange }: ReportTextareaProps) => (
+  <div className="flex flex-col gap-1">
+    <label htmlFor="text-area" className="text-sm font-medium">
+      Deskripsi Laporan
+    </label>
     <textarea
       id="text-area"
-      placeholder="Tulis Laporan Kamu disini"
-      className="border border-black rounded-lg p-4 w-full h-96"
-      ref={inputRef}
+      placeholder="Tulis laporan kamu di sini..."
+      className="border border-gray-300 rounded-md p-3 w-full h-60 resize-none focus:outline-none focus:ring-2 focus:ring-black"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
     />
-  );
-};
+  </div>
+);
+
 
 export default ReportTextarea;

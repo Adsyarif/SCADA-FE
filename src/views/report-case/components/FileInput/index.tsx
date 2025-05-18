@@ -12,18 +12,29 @@ const FileInput = ({
   onRemoveFile,
 }: FileInputProps) => {
   return (
-    <div className="flex items-center gap-2 py-2">
+    <div className="flex items-center gap-3">
       {fileName && (
-        <div className="flex items-center gap-2 border rounded px-2 py-1 bg-gray-100">
-          <p className="truncate max-w-[100px] text-sm">{fileName}</p>
-          <button type="button" onClick={onRemoveFile} aria-label="Remove file">
-            <XIcon className="w-4 h-4 text-red-500 hover:opacity-80" />
+        <div className="flex items-center gap-2 border border-gray-300 rounded-md px-3 py-1 bg-gray-50">
+          <p className="truncate max-w-[150px] text-sm text-gray-700">
+            {fileName}
+          </p>
+          <button
+            type="button"
+            onClick={onRemoveFile}
+            aria-label="Remove file"
+            className="hover:opacity-80"
+          >
+            <XIcon className="w-4 h-4 text-red-500" />
           </button>
         </div>
       )}
 
-      <label htmlFor="file-upload" className="cursor-pointer hover:opacity-80">
-        <ImagePlus className="w-5 h-5 text-black" />
+      <label
+        htmlFor="file-upload"
+        className="flex items-center gap-1 text-sm cursor-pointer text-black hover:opacity-80"
+      >
+        <ImagePlus className="w-5 h-5" />
+        Upload File
       </label>
 
       <input
@@ -36,5 +47,6 @@ const FileInput = ({
     </div>
   );
 };
+
 
 export default FileInput;

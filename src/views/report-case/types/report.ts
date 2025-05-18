@@ -8,11 +8,11 @@ export interface ReportCategory {
 }
 
 export interface CreateReportInterfaceRequest {
-  reportToId: string | undefined;
-  reportFromId: string | undefined;
+  reportToId: string;
+  reportFromId: string;
   reportCategoryId: string;
-  updatedBy?: string;
-  reportImage?: string | null;
+  updatedBy?: string | null | undefined;
+  reportImage?: string | null | undefined;
   reportDescription: string;
 }
 

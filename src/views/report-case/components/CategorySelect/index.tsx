@@ -15,11 +15,13 @@ const CategorySelect = ({
   onChange,
 }: CategorySelectProps) => {
   return (
-    <div className="flex flex-col">
-      <label htmlFor="category">Kategori:</label>
+    <div className="flex flex-col gap-1">
+      <label htmlFor="category" className="text-sm font-medium">
+        Kategori
+      </label>
       <select
         id="category"
-        className="border border-gray-400 p-2 rounded"
+        className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
         value={selectedValue}
         onChange={(e) => onChange(e.target.value)}
       >
@@ -27,7 +29,7 @@ const CategorySelect = ({
           Pilih kategori
         </option>
         {options.map((option) => (
-          <option key={option.id} value={option.label}>
+          <option key={option.id} value={option.id}>
             {option.label}
           </option>
         ))}
@@ -35,5 +37,6 @@ const CategorySelect = ({
     </div>
   );
 };
+
 
 export default CategorySelect;

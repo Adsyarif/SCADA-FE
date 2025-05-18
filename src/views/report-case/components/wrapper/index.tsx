@@ -94,7 +94,6 @@ export function ReportCase() {
             onChange={setSelectedValue}
           />
         </div>
-
         <div className="flex flex-col p-4">
           <ReportTextarea inputRef={textAreaRef} />
           <FileInput

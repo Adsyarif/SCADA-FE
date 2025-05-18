@@ -1,6 +1,10 @@
 import axiosInstance from "@/api/axiosClient";
-import { useQuery } from "@tanstack/react-query";
-import { ReportCategoriesInterface, ReportCategory } from "../types/report";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  CreateReportInterfaceRequest,
+  CreateReportInterfaceResponse,
+  ReportCategoriesInterface,
+} from "../types/report";
 import { SupervisorsInterface } from "../types/supervisor";
 
 export const useReportCategory = () => {
@@ -24,4 +28,16 @@ export const useAsignedSupervisor = (staffId: string) => {
   });
 };
 
-// export const useSubmitReport = ()
+export const useSubmitReport = () => {
+  return useMutation<
+    CreateReportInterfaceResponse,
+    Error,
+    CreateReportInterfaceRequest
+  >({
+    mutationFn: (payload) =>
+      axiosInstance
+        .post<CreateReportInterfaceResponse>("/api/reports", payload)
+        .then((res) => res.data),
+  });
+};
+

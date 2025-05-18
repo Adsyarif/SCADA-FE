@@ -1,97 +1,134 @@
-import { Button, Dropdown } from "@/components";
-import { ImgUpload } from "@/components/base/img-upload-btn";
-import { XIcon } from "lucide-react";
-import { useState } from "react";
-import { useAsignedSupervisor, useReportCategory } from "../../hooks";
+// components/ReportCase.tsx
+import { useRef, useState } from "react";
 import { useSession } from "next-auth/react";
+import {
+  useAsignedSupervisor,
+  useReportCategory,
+  useSubmitReport,
+} from "../../hooks";
+import { CreateReportInterfaceRequest } from "../../types/report";
+import FileInput from "../FileInput";
+import CategorySelect from "../CategorySelect";
+import ReportTextarea from "../ReportTextArea";
 
 export function ReportCase() {
   const [selectedValue, setSelectedValue] = useState("");
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState<any>("");
+  const [fileContent, setFileContent] = useState<string | null>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const { data: session } = useSession();
   const staffId = session?.user?.id;
 
+  const { data: categories, isLoading, error } = useReportCategory();
   const {
     data: supervisor,
     isLoading: superVisorLoading,
     error: supervisorError,
   } = useAsignedSupervisor(staffId!);
+  const {
+    mutate,
+    isPending,
+    isSuccess,
+    isError,
+    error: mutationError,
+  } = useSubmitReport();
 
-  console.log(supervisor?.data.superVisorName);
-
-  const { data: categories, isLoading, error } = useReportCategory();
   const reportCategories = categories?.data;
-
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-  const options = reportCategories!?.map((cat) => cat.categoryName);
+  const options =
+    reportCategories?.map((cat) => ({
+      id: cat.categoryId,
+      label: cat.categoryName,
+    })) || [];
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setFileName(event.target.files[0].name);
-    }
-
     if (!event.target.files?.[0]) return;
     const file = event.target.files[0];
+    setFileName(file.name);
 
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") {
+        setFileContent(reader.result);
         console.log("File content: ", reader.result);
       }
     };
     reader.readAsDataURL(file);
   };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const description = textAreaRef.current?.value || "";
+
+    const payload: CreateReportInterfaceRequest = {
+      reportToId: supervisor?.data.supervisorId,
+      reportFromId: staffId,
+      reportCategoryId: selectedValue,
+      updatedBy: session?.user.name,
+      reportImage: fileContent,
+      reportDescription: description,
+    };
+
+    mutate(payload);
+  };
+
+  if (isLoading || superVisorLoading) return <p>Loading...</p>;
+  if (error || supervisorError)
+    return <p>Error: {error?.message || supervisorError?.message}</p>;
+
   return (
     <div className="flex flex-col w-full pt-16">
-      <form id={"action"} className={"grow"}>
+      <form onSubmit={handleSubmit} className="grow">
         <div className="w-full flex justify-center">
-          <h1 className={"text-2xl font-semibold p-4"}>Buat Laporan</h1>
+          <h1 className="text-2xl font-semibold p-4">Buat Laporan</h1>
         </div>
-        <div className={"flex flex-col justify-start items-start gap-4 m-4"}>
+
+        <div className="flex flex-col justify-start items-start gap-4 m-4">
           <div className="flex flex-col">
             <span>Kepada:</span>
             <span>{supervisor?.data.superVisorName}</span>
           </div>
-          <div>
-            <Dropdown
-              options={options}
-              value={selectedValue}
-              onValueChange={(val) => setSelectedValue(val)}
-            />
-          </div>
+          <CategorySelect
+            options={options}
+            selectedValue={selectedValue}
+            onChange={setSelectedValue}
+          />
         </div>
         <div className="flex flex-col p-4">
-          <textarea
-            name="text-area"
-            id="text-area"
-            placeholder="Tulis Laporan Kamu disini"
-            className="border border-black rounded-lg p-4 w-full h-96"
+          <ReportTextarea inputRef={textAreaRef} />
+          <FileInput
+            fileName={fileName}
+            onFileChange={handleFileChange}
+            onRemoveFile={() => {
+              setFileName("");
+              setFileContent(null);
+            }}
           />
-          <div>
-            <div className="flex gap-2 py-2">
-              {fileName && (
-                <div className="flex gap-2 w-32">
-                  <p className="truncate">{fileName}</p>
-                  <button onClick={() => setFileName("")}>
-                    <XIcon className="cursor-pointer" />
-                  </button>
-                </div>
-              )}
+        </div>
 
-              <ImgUpload
-                onChange={handleFileChange}
-                accept=".jpg, .png"
-                multiple={true}
-              />
-            </div>
-          </div>
-        </div>
         <div className="flex gap-4 p-4">
-          <Button>Kirim</Button>
-          <Button containerClassName="bg-white border text-black">Batal</Button>
+          <button
+            type="submit"
+            className="bg-black text-white px-4 py-2 rounded hover:opacity-80"
+          >
+            {isPending ? "Mengirim..." : "Kirim"}
+          </button>
+          <button
+            type="button"
+            className="bg-white border border-black text-black px-4 py-2 rounded"
+          >
+            Batal
+          </button>
         </div>
+
+        {isSuccess && (
+          <p className="text-green-600 p-4">Laporan berhasil dikirim!</p>
+        )}
+        {isError && (
+          <p className="text-red-600 p-4">
+            Terjadi kesalahan: {mutationError?.message}
+          </p>
+        )}
       </form>
     </div>
   );

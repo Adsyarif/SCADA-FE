@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import {
   useAsignedSupervisor,
@@ -10,30 +11,28 @@ import FileInput from "../FileInput";
 import CategorySelect from "../CategorySelect";
 import ReportTextarea from "../ReportTextArea";
 
-export function ReportCase() {
+const ReportCase = () => {
   const [selectedValue, setSelectedValue] = useState("");
-  const [fileName, setFileName] = useState<any>("");
+  const [fileName, setFileName] = useState<string>("");
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [description, setDescription] = useState("");
-  const [statusPage, setStatusPage] = useState<"form" | "loading" | "success" | "error">("form");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { data: session, status } = useSession();
+  const router = useRouter();
+  const { data: session } = useSession();
   const staffId = session?.user?.id || "";
 
-  const { data: categories, isLoading, error } = useReportCategory();
+  const {
+    data: categories,
+    isLoading: isCatLoading,
+    error: catError,
+  } = useReportCategory();
   const {
     data: supervisor,
-    isLoading: superVisorLoading,
-    error: supervisorError,
+    isLoading: isSupervisorLoading,
+    error: supError,
   } = useAsignedSupervisor(staffId);
-  const {
-    mutate,
-    isPending,
-    isSuccess,
-    isError,
-    error: mutationError,
-  } = useSubmitReport();
+  const { mutate } = useSubmitReport();
 
   const reportCategories = categories?.data;
   const options =
@@ -69,7 +68,7 @@ export function ReportCase() {
       return;
     }
 
-    setStatusPage("loading");
+    setIsLoading(true);
 
     const payload: CreateReportInterfaceRequest = {
       reportToId: supervisor?.data.supervisorId,
@@ -82,86 +81,59 @@ export function ReportCase() {
 
     mutate(payload, {
       onSuccess: () => {
-        setStatusPage("success");
-        // Reset form data if you want
-        setSelectedValue("");
-        setFileName("");
-        setFileContent(null);
-        setDescription("");
+        setIsLoading(false);
+        router.push("/report-case/success");
       },
-      onError: (error: any) => {
-        setErrorMessage(error?.message || "Terjadi kesalahan saat mengirim laporan.");
-        setStatusPage("error");
+      onError: () => {
+        setIsLoading(false);
+        router.push("/report-case/error");
       },
     });
   };
 
-  if (status === "loading" || isLoading || superVisorLoading) return <p>Loading...</p>;
+  if (isCatLoading || isSupervisorLoading) return <p>Loading...</p>;
+  if (catError || supError)
+    return <p>Error: {(catError || supError)?.message}</p>;
 
-  if (error || supervisorError) return <p>Error: {error?.message || supervisorError?.message}</p>;
-
-  if (statusPage === "loading") {
-    return (
-      <div className="flex flex-col items-center justify-center h-full p-8">
-        <p className="text-xl font-semibold mb-4">Mengirim laporan, mohon tunggu...</p>
-        {/* Bisa ditambahkan spinner animasi */}
-      </div>
-    );
-  }
-
-  if (statusPage === "success") {
-    return (
-      <div className="flex flex-col items-center justify-center h-full p-8">
-        <p className="text-green-600 text-xl font-semibold mb-6">Laporan berhasil dikirim!</p>
-        <button
-          className="bg-black text-white px-6 py-3 rounded hover:opacity-80"
-          onClick={() => {
-            // Kembali ke halaman utama, ganti dengan route yang sesuai
-            window.location.href = "/homepage";
-          }}
-        >
-          Kembali ke Halaman Utama
-        </button>
-      </div>
-    );
-  }
-
-  if (statusPage === "error") {
-    return (
-      <div className="flex flex-col items-center justify-center h-full p-8">
-        <p className="text-red-600 text-xl font-semibold mb-6">Gagal mengirim laporan!</p>
-        <p className="mb-4">{errorMessage}</p>
-        <button
-          className="bg-white border border-black text-black px-6 py-3 rounded hover:bg-gray-100"
-          onClick={() => setStatusPage("form")}
-        >
-          Kembali ke Pengisian Laporan
-        </button>
-      </div>
-    );
-  }
-
-  // statusPage === "form"
   return (
-    <div className="flex flex-col w-full">
-      <form onSubmit={handleSubmit} className="grow">
-        <div className="w-full flex justify-center">
-          <h1 className="text-2xl font-semibold p-4">Buat Laporan</h1>
+    <div className="w-full justify-center px-6 py-2">
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center h-48">
+          <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16 mb-4"></div>
+          <p className="text-lg font-medium">
+            Mengirim laporan, mohon tunggu...
+          </p>
+          <style jsx>{`
+            .loader {
+              border-top-color: #000;
+              animation: spin 1s linear infinite;
+            }
+            @keyframes spin {
+              0% {
+                transform: rotate(0deg);
+              }
+              100% {
+                transform: rotate(360deg);
+              }
+            }
+          `}</style>
         </div>
-
-        <div className="flex flex-col justify-start items-start gap-4 m-4">
-          <div className="flex flex-col">
-            <span>Kepada:</span>
-            <span>{supervisor?.data?.superVisorName || "-"}</span>
+      ) : (
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <h1 className="text-2xl font-bold text-center">Buat Laporan</h1>
+          <div>
+            <label className="block font-semibold mb-1">Kepada:</label>
+            <p>{supervisor?.data?.superVisorName || "-"}</p>
           </div>
+
           <CategorySelect
             options={options}
             selectedValue={selectedValue}
             onChange={setSelectedValue}
           />
-        </div>
-        <div className="flex gap-3 flex-col p-4">
+
           <ReportTextarea value={description} onChange={setDescription} />
+
           <FileInput
             fileName={fileName}
             onFileChange={handleFileChange}
@@ -170,31 +142,33 @@ export function ReportCase() {
               setFileContent(null);
             }}
           />
-        </div>
 
-        <div className="flex gap-4 p-4">
-          <button
-            type="submit"
-            className="bg-black text-white px-4 py-2 rounded hover:opacity-80"
-            disabled={isPending}
-          >
-            {isPending ? "Mengirim..." : "Kirim"}
-          </button>
-          <button
-            type="button"
-            className="bg-white border border-black text-black px-4 py-2 rounded"
-            onClick={() => {
-              setSelectedValue("");
-              setFileName("");
-              setFileContent(null);
-              setDescription("");
-            }}
-            disabled={isPending}
-          >
-            Batal
-          </button>
-        </div>
-      </form>
+          <div className="flex gap-4 mt-4">
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="flex-grow bg-black text-white py-2 rounded hover:bg-gray-800 transition"
+            >
+              Kirim
+            </button>
+            <button
+              type="button"
+              disabled={isLoading}
+              className="flex-grow border border-black py-2 rounded hover:bg-gray-100 transition"
+              onClick={() => {
+                setSelectedValue("");
+                setFileName("");
+                setFileContent(null);
+                setDescription("");
+              }}
+            >
+              Batal
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
-}
+};
+
+export default ReportCase;

@@ -15,17 +15,18 @@ export function ReportCase() {
   const [fileName, setFileName] = useState<any>("");
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [description, setDescription] = useState("");
+  const [statusPage, setStatusPage] = useState<"form" | "loading" | "success" | "error">("form");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-
-  const { data: session } = useSession();
-  const staffId = session?.user?.id;
+  const { data: session, status } = useSession();
+  const staffId = session?.user?.id || "";
 
   const { data: categories, isLoading, error } = useReportCategory();
   const {
     data: supervisor,
     isLoading: superVisorLoading,
     error: supervisorError,
-  } = useAsignedSupervisor(staffId!);
+  } = useAsignedSupervisor(staffId);
   const {
     mutate,
     isPending,
@@ -50,7 +51,6 @@ export function ReportCase() {
     reader.onload = () => {
       if (typeof reader.result === "string") {
         setFileContent(reader.result);
-        console.log("File content: ", reader.result);
       }
     };
     reader.readAsDataURL(file);
@@ -58,44 +58,92 @@ export function ReportCase() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedValue || !description) {
-      alert("Please select a category, upload a file, and write a description.");
-      return;
-    }
 
-    const payload: CreateReportInterfaceRequest = {
-      reportToId: supervisor?.data.supervisorId!,
-      reportFromId: staffId!,
-      reportCategoryId: selectedValue,
-      updatedBy: session?.user.name,
-      reportImage: fileContent,
-      reportDescription: description,
-    };
- 
-    if (!selectedValue ||  !description) {
+    if (!selectedValue || !description) {
       alert("Mohon lengkapi semua field sebelum mengirim laporan.");
       return;
     }
-    mutate(payload);
+
+    if (!supervisor?.data?.supervisorId) {
+      alert("Supervisor tidak ditemukan.");
+      return;
+    }
+
+    setStatusPage("loading");
+
+    const payload: CreateReportInterfaceRequest = {
+      reportToId: supervisor?.data.supervisorId,
+      reportFromId: staffId,
+      reportCategoryId: selectedValue,
+      updatedBy: session?.user?.name || "unknown",
+      reportImage: fileContent,
+      reportDescription: description,
+    };
+
+    mutate(payload, {
+      onSuccess: () => {
+        setStatusPage("success");
+        // Reset form data if you want
+        setSelectedValue("");
+        setFileName("");
+        setFileContent(null);
+        setDescription("");
+      },
+      onError: (error: any) => {
+        setErrorMessage(error?.message || "Terjadi kesalahan saat mengirim laporan.");
+        setStatusPage("error");
+      },
+    });
   };
 
-  if (isLoading || superVisorLoading) return <p>Loading...</p>;
-  if (error || supervisorError)
-    return <p>Error: {error?.message || supervisorError?.message}</p>;
+  if (status === "loading" || isLoading || superVisorLoading) return <p>Loading...</p>;
 
+  if (error || supervisorError) return <p>Error: {error?.message || supervisorError?.message}</p>;
 
-  useEffect(() => {
-  if (isSuccess) {
-    setSelectedValue("");
-    setFileName("");
-    setFileContent(null);
-    setDescription("");
+  if (statusPage === "loading") {
+    return (
+      <div className="flex flex-col items-center justify-center h-full p-8">
+        <p className="text-xl font-semibold mb-4">Mengirim laporan, mohon tunggu...</p>
+        {/* Bisa ditambahkan spinner animasi */}
+      </div>
+    );
   }
-}, [isSuccess]);
 
+  if (statusPage === "success") {
+    return (
+      <div className="flex flex-col items-center justify-center h-full p-8">
+        <p className="text-green-600 text-xl font-semibold mb-6">Laporan berhasil dikirim!</p>
+        <button
+          className="bg-black text-white px-6 py-3 rounded hover:opacity-80"
+          onClick={() => {
+            // Kembali ke halaman utama, ganti dengan route yang sesuai
+            window.location.href = "/homepage";
+          }}
+        >
+          Kembali ke Halaman Utama
+        </button>
+      </div>
+    );
+  }
 
+  if (statusPage === "error") {
+    return (
+      <div className="flex flex-col items-center justify-center h-full p-8">
+        <p className="text-red-600 text-xl font-semibold mb-6">Gagal mengirim laporan!</p>
+        <p className="mb-4">{errorMessage}</p>
+        <button
+          className="bg-white border border-black text-black px-6 py-3 rounded hover:bg-gray-100"
+          onClick={() => setStatusPage("form")}
+        >
+          Kembali ke Pengisian Laporan
+        </button>
+      </div>
+    );
+  }
+
+  // statusPage === "form"
   return (
-    <div className="flex flex-col w-full pt-16">
+    <div className="flex flex-col w-full">
       <form onSubmit={handleSubmit} className="grow">
         <div className="w-full flex justify-center">
           <h1 className="text-2xl font-semibold p-4">Buat Laporan</h1>
@@ -104,7 +152,7 @@ export function ReportCase() {
         <div className="flex flex-col justify-start items-start gap-4 m-4">
           <div className="flex flex-col">
             <span>Kepada:</span>
-            <span>{supervisor?.data.superVisorName}</span>
+            <span>{supervisor?.data?.superVisorName || "-"}</span>
           </div>
           <CategorySelect
             options={options}
@@ -112,7 +160,7 @@ export function ReportCase() {
             onChange={setSelectedValue}
           />
         </div>
-        <div className="flex flex-col p-4">
+        <div className="flex gap-3 flex-col p-4">
           <ReportTextarea value={description} onChange={setDescription} />
           <FileInput
             fileName={fileName}
@@ -128,6 +176,7 @@ export function ReportCase() {
           <button
             type="submit"
             className="bg-black text-white px-4 py-2 rounded hover:opacity-80"
+            disabled={isPending}
           >
             {isPending ? "Mengirim..." : "Kirim"}
           </button>
@@ -140,19 +189,11 @@ export function ReportCase() {
               setFileContent(null);
               setDescription("");
             }}
+            disabled={isPending}
           >
             Batal
           </button>
         </div>
-
-        {isSuccess && (
-          <p className="text-green-600 p-4">Laporan berhasil dikirim!</p>
-        )}
-        {isError && (
-          <p className="text-red-600 p-4">
-            Terjadi kesalahan: {mutationError?.message}
-          </p>
-        )}
       </form>
     </div>
   );

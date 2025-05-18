@@ -9,7 +9,7 @@ export default function Document() {
                     integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
                     crossOrigin="" />
         </Head>
-        <body className="antialiased flex h-screen w-full justify-center items-center bg-gray-200">
+        <body className="antialiased flex h-screen w-full justify-center bg-gray-200">
         <Main/>
         <NextScript/>
         </body>

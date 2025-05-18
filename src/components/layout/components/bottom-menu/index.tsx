@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export function BottomMenu() {
     return (
-        <div className="flex justify-around gap-4 p-4 bg-white">
+        <div className="flex justify-around gap-4 p-4 opacity-80 bg-white">
             <Link href="/homepage"><HouseIcon /></Link>
             <Link href="/message"><Mail /></Link>
             <Link href="/notification"><Bell/></Link>

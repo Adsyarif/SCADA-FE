@@ -1,5 +1,4 @@
-// components/ReportCase.tsx
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import {
   useAsignedSupervisor,
@@ -15,7 +14,8 @@ export function ReportCase() {
   const [selectedValue, setSelectedValue] = useState("");
   const [fileName, setFileName] = useState<any>("");
   const [fileContent, setFileContent] = useState<string | null>(null);
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const [description, setDescription] = useState("");
+
 
   const { data: session } = useSession();
   const staffId = session?.user?.id;
@@ -58,23 +58,41 @@ export function ReportCase() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const description = textAreaRef.current?.value || "";
+    if (!selectedValue || !description) {
+      alert("Please select a category, upload a file, and write a description.");
+      return;
+    }
 
     const payload: CreateReportInterfaceRequest = {
-      reportToId: supervisor?.data.supervisorId,
-      reportFromId: staffId,
+      reportToId: supervisor?.data.supervisorId!,
+      reportFromId: staffId!,
       reportCategoryId: selectedValue,
       updatedBy: session?.user.name,
       reportImage: fileContent,
       reportDescription: description,
     };
-
+ 
+    if (!selectedValue ||  !description) {
+      alert("Mohon lengkapi semua field sebelum mengirim laporan.");
+      return;
+    }
     mutate(payload);
   };
 
   if (isLoading || superVisorLoading) return <p>Loading...</p>;
   if (error || supervisorError)
     return <p>Error: {error?.message || supervisorError?.message}</p>;
+
+
+  useEffect(() => {
+  if (isSuccess) {
+    setSelectedValue("");
+    setFileName("");
+    setFileContent(null);
+    setDescription("");
+  }
+}, [isSuccess]);
+
 
   return (
     <div className="flex flex-col w-full pt-16">
@@ -95,7 +113,7 @@ export function ReportCase() {
           />
         </div>
         <div className="flex flex-col p-4">
-          <ReportTextarea inputRef={textAreaRef} />
+          <ReportTextarea value={description} onChange={setDescription} />
           <FileInput
             fileName={fileName}
             onFileChange={handleFileChange}
@@ -116,6 +134,12 @@ export function ReportCase() {
           <button
             type="button"
             className="bg-white border border-black text-black px-4 py-2 rounded"
+            onClick={() => {
+              setSelectedValue("");
+              setFileName("");
+              setFileContent(null);
+              setDescription("");
+            }}
           >
             Batal
           </button>

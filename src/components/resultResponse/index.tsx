@@ -5,12 +5,16 @@ interface ResultResponseProps {
   isSuccess: boolean;
   title: string;
   description: string;
+  redirect: string;
+  btnName: string 
 }
 
 const ResultResponse = ({
   isSuccess,
   title,
   description,
+  redirect,
+  btnName
 }: ResultResponseProps) => {
   return (
     <div className="h-screen lg:w-[450px] flex flex-col justify-center items-center gap-8 bg-white">
@@ -32,11 +36,12 @@ const ResultResponse = ({
           <p className="px-20">{description}</p>
         </div>
       </div>
-      <Link href={"/homepage"}>
+      <Link href={redirect}>
         <div className="w-24">
-          <Button>Kembali</Button>
+          <Button>{btnName}</Button>
         </div>
       </Link>
+
     </div>
   );
 };

@@ -1,1 +1,1 @@
-export * from "./wrapper";
+export {default as ReportCase} from "./wrapper";

@@ -11,12 +11,11 @@ const ReportTextarea = ({ value, onChange }: ReportTextareaProps) => (
     <textarea
       id="text-area"
       placeholder="Tulis laporan kamu di sini..."
-      className="border border-gray-300 rounded-md p-3 w-full h-30 resize-none focus:outline-none"
+      className="border border-gray-300 rounded-md p-3 w-full h-60 resize-none focus:outline-none"
       value={value}
       onChange={(e) => onChange(e.target.value)}
     />
   </div>
 );
-
 
 export default ReportTextarea;

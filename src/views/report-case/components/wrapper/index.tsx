@@ -155,12 +155,7 @@ const ReportCase = () => {
               type="button"
               disabled={isLoading}
               className="flex-grow border border-black py-2 rounded hover:bg-gray-100 transition"
-              onClick={() => {
-                setSelectedValue("");
-                setFileName("");
-                setFileContent(null);
-                setDescription("");
-              }}
+              onClick={() => router.push("/reports")}
             >
               Batal
             </button>

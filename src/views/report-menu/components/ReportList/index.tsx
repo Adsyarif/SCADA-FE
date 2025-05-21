@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
+
 interface Report {
   reportId: string;
   reportToId: string;
@@ -21,15 +24,20 @@ const ReportList = ({
   totalPages,
   setCurrentPage,
 }: Props) => {
+  const router = useRouter();
   if (reports.length === 0) return <p>Tidak ada laporan yang sesuai.</p>;
-
+  const onClick = (id: string) => {
+    console.log(id);
+    router.push(`/reports/${id}`);
+  };
   return (
     <>
       <div className="space-y-3 grid gap-2 grid-cols-2 grid-rows-2 ">
         {reports.map((report, index) => (
           <div
-            key={`${report.reportDescription}-${index}`}
             className="p-2 border rounded shadow bg-white"
+            key={`${report.reportDescription}-${index}`}
+            onClick={() => onClick(report.reportId)}
           >
             <p className="font-semibold">{report.reportDescription}</p>
             <p className="text-sm text-gray-600">

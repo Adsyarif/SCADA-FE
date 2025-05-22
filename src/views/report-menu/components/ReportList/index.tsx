@@ -27,7 +27,6 @@ const ReportList = ({
   const router = useRouter();
   if (reports.length === 0) return <p>Tidak ada laporan yang sesuai.</p>;
   const onClick = (id: string) => {
-    console.log(id);
     router.push(`/reports/${id}`);
   };
   return (
@@ -39,10 +38,8 @@ const ReportList = ({
             key={`${report.reportDescription}-${index}`}
             onClick={() => onClick(report.reportId)}
           >
-            <p className="font-semibold">{report.reportDescription}</p>
-            <p className="text-sm text-gray-600">
-              Kategori: {report.reportCategory}
-            </p>
+            <p className="font-semibold">{report.reportCategory}</p>
+
             <p className="text-sm text-gray-600">Kepada: {report.reportTo}</p>
             <p className="text-sm text-gray-600">
               Tanggal: {new Date(report.create_at).toLocaleDateString()}

@@ -9,8 +9,10 @@ import ReportList from "../ReportList";
 import FilterPanel from "../FilterPanel";
 import SearchInput from "../SearchInput";
 import SkeletonReport from "../SkeletonReport";
+import { useRouter } from "next/router";
 
 const ReportMenu = () => {
+  const router = useRouter();
   const { data: session } = useSession();
   const userPermissions = session?.user?.permissions || [];
   const userId = session?.user.id;
@@ -79,7 +81,13 @@ const ReportMenu = () => {
 
   return (
     <div className="px-2 flex flex-col gap-4">
-      <Title isButton={true} text="Daftar Laporan" />
+      <Title
+        isButton={true}
+        text="Daftar Laporan"
+        handleBackClick={() => {
+          router.push("/homepage");
+        }}
+      />
 
       {checkPermission("manage:schedule") && (
         <Link

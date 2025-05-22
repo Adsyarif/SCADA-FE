@@ -1,12 +1,21 @@
 import { Layout } from "@/components";
+import ReportMenu from "@/views/report-detail/components/wrapper";
+import { ReportDetailInterface } from "@/views/report-detail/type/reportDetail";
 import { useParams } from "next/navigation";
 
 const ReportById = () => {
   const param = useParams();
-  const id = param?.id;
+  const id = param?.id?.toLocaleString();
 
-  console.log(id);
-  return <div>{id}</div>;
+  if (!id) {
+    return <p>No report found</p>;
+  }
+
+  const ReportDetail: ReportDetailInterface = {
+    reportDetailId: id,
+  };
+
+  return <ReportMenu reportDetailId={ReportDetail.reportDetailId} />;
 };
 
 export default ReportById;

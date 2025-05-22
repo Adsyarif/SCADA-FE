@@ -1,15 +1,20 @@
 import { ReportCategory } from "@/views/report-case/types/report";
 
 export interface ReportListResponseProps {
-  data: ReportListResponseDataInterface[];
+  data: ReportDetailResponseDataInterface;
 }
 
-interface ReportListResponseDataInterface {
+interface ReportDetailResponseDataInterface {
   reportId: string;
   reportToId: string;
   reportTo: string;
   create_at: Date;
   reportCategoryId: string;
-  reportCategory: string;
+  reportCategoryName: string;
   reportDescription: string;
+  reportImage: string;
+}
+
+export interface ReportDetailInterface {
+  reportDetailId: string;
 }

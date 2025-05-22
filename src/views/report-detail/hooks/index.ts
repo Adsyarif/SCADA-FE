@@ -1,14 +1,16 @@
 import axiosInstance from "@/api/axiosClient";
-import { ReportListResponseProps } from "../type/listReport";
+import { ReportListResponseProps } from "../type/reportDetail";
 import { useQuery } from "@tanstack/react-query";
 
-export const useListReport = (userId: string) => {
+export const useDetailReport = (reportId: string) => {
   return useQuery<ReportListResponseProps, Error>({
     queryKey: ["report", "list"],
     queryFn: () =>
       axiosInstance
-        .get<ReportListResponseProps>(`/api/reports/get-report/${userId}`)
+        .get<ReportListResponseProps>(
+          `/api/reports/get-report-by-id/${reportId}`
+        )
         .then((res) => res.data),
-    enabled: !!userId,
+    enabled: !!reportId,
   });
 };

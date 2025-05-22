@@ -4,13 +4,10 @@ import { useRouter } from "next/router";
 interface TitleProps {
   text: string;
   isButton?: boolean;
+  handleBackClick?: () => void;
 }
 
-const Title = ({ text, isButton }: TitleProps) => {
-  const router = useRouter();
-  const handleBackClick = () => {
-    router.back();
-  };
+const Title = ({ text, isButton, handleBackClick }: TitleProps) => {
   return (
     <div className="flex px-5 relative h-[65px] w-full">
       {isButton && (

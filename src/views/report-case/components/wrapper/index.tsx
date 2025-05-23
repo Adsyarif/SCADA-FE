@@ -118,6 +118,8 @@ const ReportCase = () => {
             }
           `}</style>
         </div>
+      ) : !supervisor?.data ? (
+        <p>Cannot make report</p>
       ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <h1 className="text-2xl font-bold text-center">Buat Laporan</h1>
@@ -155,12 +157,7 @@ const ReportCase = () => {
               type="button"
               disabled={isLoading}
               className="flex-grow border border-black py-2 rounded hover:bg-gray-100 transition"
-              onClick={() => {
-                setSelectedValue("");
-                setFileName("");
-                setFileContent(null);
-                setDescription("");
-              }}
+              onClick={() => router.push("/reports")}
             >
               Batal
             </button>

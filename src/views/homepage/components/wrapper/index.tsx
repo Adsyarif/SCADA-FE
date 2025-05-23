@@ -7,9 +7,7 @@ import {
   Rss,
   ScanEye,
   Settings,
-  User,
   User2Icon,
-  UserPen,
   Users,
   UserSquare2,
   Wallet,
@@ -65,7 +63,7 @@ export function HomepageWrapper() {
             </MenuItems>
           )}
           {checkPermission("create:reports") && (
-            <MenuItems href="/report-case" menuName="Buat Laporan">
+            <MenuItems href="/reports" menuName="Buat Laporan">
               <File />
             </MenuItems>
           )}

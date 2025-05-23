@@ -5,7 +5,7 @@ interface ListOperatorInterface {
   data: ListOperatorProps[];
 }
 
-interface ListOperatorProps {
+export interface ListOperatorProps {
   operatorId: string;
   operatorName: string;
 }

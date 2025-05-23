@@ -1,4 +1,3 @@
-// ReportMenu.tsx
 import { useMemo, useState } from "react";
 import { Title } from "@/components";
 import { FilePlus } from "lucide-react";
@@ -31,19 +30,19 @@ const ReportMenu = () => {
   const itemsPerPage = 4;
 
   const categoryOptions = useMemo(() => {
-    if (!reports?.data) return [];
-    const categories = reports.data.map((r) => r.reportCategory);
+    const data = Array.isArray(reports?.data) ? reports.data : [];
+    const categories = data.map((r) => r.reportCategory);
     return Array.from(new Set(categories));
   }, [reports?.data]);
 
   const reportToOptions = useMemo(() => {
-    if (!reports?.data) return [];
-    const reportTos = reports.data.map((r) => r.reportTo);
+    const data = Array.isArray(reports?.data) ? reports.data : [];
+    const reportTos = data.map((r) => r.reportTo);
     return Array.from(new Set(reportTos));
   }, [reports?.data]);
 
   const filteredReports = useMemo(() => {
-    if (!reports?.data) return [];
+    if (!Array.isArray(reports?.data)) return [];
 
     return reports.data.filter((report) => {
       const matchesSearch = report.reportDescription
@@ -63,6 +62,8 @@ const ReportMenu = () => {
     });
   }, [reports?.data, searchText, filterCategory, filterReportTo, filterDate]);
 
+  console.log(filteredReports);
+
   const totalPages = Math.ceil(filteredReports.length / itemsPerPage);
   const paginatedReports = filteredReports.slice(
     (currentPage - 1) * itemsPerPage,
@@ -77,10 +78,8 @@ const ReportMenu = () => {
     setCurrentPage(1);
   };
 
-  if (error) return <p>Gagal memuat laporan.</p>;
-
   return (
-    <div className="px-2 flex flex-col gap-4">
+    <div className="px-2 w-full flex flex-col gap-4">
       <Title
         isButton={true}
         text="Daftar Laporan"
@@ -89,7 +88,7 @@ const ReportMenu = () => {
         }}
       />
 
-      {checkPermission("manage:schedule") && (
+      {checkPermission("reporting") && (
         <Link
           href="/reports/report-case/"
           className="inline-flex gap-1 items-center text-blue-600 hover:underline"
@@ -115,6 +114,10 @@ const ReportMenu = () => {
 
       {isLoading ? (
         <SkeletonReport />
+      ) : reports?.data.filter((report) => report.reportId).length === 0 ? (
+        <p>Laporan tidak ditemukan</p>
+      ) : error ? (
+        <p>Gagal memuat laporan.</p>
       ) : (
         <ReportList
           reports={paginatedReports}

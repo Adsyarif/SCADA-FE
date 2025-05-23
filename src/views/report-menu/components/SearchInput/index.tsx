@@ -4,7 +4,7 @@ interface Props {
 }
 
 const SearchInput = ({ searchText, setSearchText }: Props) => (
-  <div className="bg-gray-100 p-2 rounded">
+  <div className=" rounded">
     <input
       type="text"
       placeholder="Cari laporan..."

@@ -29,21 +29,44 @@ const ReportList = ({
   const onClick = (id: string) => {
     router.push(`/reports/${id}`);
   };
+
+  const getDayNameInID = (date: Date) => {
+    const dates = new Date("2025-05-21T17:15:04.496Z");
+
+    const namaHari = [
+      "Minggu",
+      "Senin",
+      "Selasa",
+      "Rabu",
+      "Kamis",
+      "Jumat",
+      "Sabtu",
+    ];
+
+    const hari = namaHari[date.getUTCDay()];
+
+    console.log(hari);
+  };
+
+  console.log(reports[0].create_at);
   return (
     <>
-      <div className="space-y-3 grid gap-2 grid-cols-2 grid-rows-2 ">
+      <div className="space-y-3 flex flex-col gap-2 ">
         {reports.map((report, index) => (
           <div
-            className="p-2 border rounded shadow bg-white"
+            className="p-2 rounded shadow bg-white"
             key={`${report.reportDescription}-${index}`}
             onClick={() => onClick(report.reportId)}
           >
-            <p className="font-semibold">{report.reportCategory}</p>
+            <div></div>
+            <div>
+              <p className="font-semibold">{report.reportCategory}</p>
 
-            <p className="text-sm text-gray-600">Kepada: {report.reportTo}</p>
-            <p className="text-sm text-gray-600">
-              Tanggal: {new Date(report.create_at).toLocaleDateString()}
-            </p>
+              <p className="text-sm text-gray-600">Kepada: {report.reportTo}</p>
+              <p className="text-sm text-gray-600">
+                Tanggal: {new Date(report.create_at).toLocaleDateString()}
+              </p>
+            </div>
           </div>
         ))}
       </div>

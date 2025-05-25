@@ -1,16 +1,16 @@
-import { Layout } from "@/components";
-import { LogReportWrapper } from "@/views";
+// import { Layout } from "@/components";
+// import { LogReportWrapper } from "@/views";
 
-const LogReport = () => {
-  return (
-    <>
-      <LogReportWrapper />
-    </>
-  );
-};
+// const LogReport = () => {
+//   return (
+//     <>
+//       <LogReportWrapper />
+//     </>
+//   );
+// };
 
-export default LogReport;
+// export default LogReport;
 
-LogReport.getLayout = (page: React.ReactNode) => {
-  return <Layout>{page}</Layout>;
-};
+// LogReport.getLayout = (page: React.ReactNode) => {
+//   return <Layout>{page}</Layout>;
+// };

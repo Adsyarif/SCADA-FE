@@ -12,4 +12,5 @@ interface ReportListResponseDataInterface {
   reportCategoryId: string;
   reportCategory: string;
   reportDescription: string;
+  status: "PENDING" | "REJECTED" | "APPROVED" | "REVISION";
 }

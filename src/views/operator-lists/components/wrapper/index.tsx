@@ -1,12 +1,14 @@
 import { Title } from "@/components";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useListOperator, ListOperatorProps } from "../../hooks";
 import { useSession } from "next-auth/react";
 import { LucideLoader, LucideSearch } from "lucide-react";
-import Link from 'next/link';
-
+import { useRouter } from "next/router";
+import { AppContext, UserNameInterface } from "@/context";
 
 const OperatorListWrapper = () => {
+  const { selectedUser, setSelectedUser } = useContext(AppContext);
+  const router = useRouter();
   const { data: session } = useSession();
   const supervisorId = session?.user.id || "";
 
@@ -16,9 +18,25 @@ const OperatorListWrapper = () => {
     isError,
   } = useListOperator(supervisorId);
 
-  const [filteredOperators, setFilteredOperators] = useState<ListOperatorProps[]>([]);
+  const [filteredOperators, setFilteredOperators] = useState<
+    ListOperatorProps[]
+  >([]);
   const [searchInput, setSearchInput] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
+
+  const handleSelectedUser = (user: UserNameInterface) => {
+    setSelectedUser({
+      userId: user.userId,
+      userName: user.userName,
+    });
+  };
+
+  useEffect(() => {
+    if (selectedUser) {
+      // console.log(selectedUser);
+      router.push(`list-operator/log-report/${selectedUser.userId}`);
+    }
+  }, [selectedUser]);
 
   useEffect(() => {
     if (operators?.data) {
@@ -28,13 +46,13 @@ const OperatorListWrapper = () => {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    if (!operators?.data || !searchInput) return;
-  
+
+    if (!operators?.data) return;
+
     setIsSearching(true);
-  
+
     await new Promise((resolve) => setTimeout(resolve, 500));
-  
+
     const filtered = operators.data.filter((op) =>
       op.operatorName.toLowerCase().includes(searchInput.toLowerCase())
     );
@@ -45,9 +63,12 @@ const OperatorListWrapper = () => {
   return (
     <div className="flex grow">
       <div className="grow w-full">
-        <Title isButton={true} text="Daftar Operator" />
+        <Title
+          isButton={true}
+          text="Daftar Operator"
+          handleBackClick={() => router.push("/homepage")}
+        />
         <div className="bg-[#E8E8E8]">
-
           {/* FORM SEACRH */}
           <form onSubmit={handleSearch}>
             <div className="flex justify-between items-center py-2 px-5 gap-4">
@@ -82,39 +103,59 @@ const OperatorListWrapper = () => {
                     <p className="font-semibold">{ops.operatorName}</p>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <button className="text-green-600 hover:text-green-800">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        strokeWidth={1.5} stroke="currentColor" className="size-9">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                          d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    <div className="text-green-60">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-9"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
                       </svg>
-                    </button>
-                    <Link href="/list-operator/log-report">
+                    </div>
+                    <div
+                      onClick={() =>
+                        handleSelectedUser({
+                          userName: ops.operatorName,
+                          userId: ops.operatorId,
+                        })
+                      }
+                    >
                       <button className="text-green-600 hover:text-green-800">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                          strokeWidth={1.5} stroke="currentColor" className="size-8">
-                          <path strokeLinecap="round" strokeLinejoin="round"
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="size-8"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 
-                            1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                            1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                          />
                         </svg>
                       </button>
-                    </Link>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
             {!isSearching && filteredOperators.length === 0 && (
-              <p className="text-center text-gray-500 mt-4">Data operator tidak ditemukan.</p>
+              <p className="text-center text-gray-500 mt-4">
+                Data operator tidak ditemukan.
+              </p>
             )}
           </div>
         </div>
-        {operators?.data.map((ops, idx) => {
-          return (
-            <div key={idx}>
-              <div>{ops.operatorName}</div>
-            </div>
-          );
-        })}
       </div>
     </div>
   );

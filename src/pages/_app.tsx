@@ -21,12 +21,12 @@ export default function MyApp({
   const getLayout = Component.getLayout ?? ((page) => page);
   const [queryClient] = useState(() => new QueryClient());
   return getLayout(
-    <SessionProvider session={session}>
-      <QueryClientProvider client={queryClient}>
-        <AppProvider>
+    <AppProvider>
+      <SessionProvider session={session}>
+        <QueryClientProvider client={queryClient}>
           <Component {...pageProps} />
-        </AppProvider>
-      </QueryClientProvider>
-    </SessionProvider>
+        </QueryClientProvider>
+      </SessionProvider>
+    </AppProvider>
   );
 }

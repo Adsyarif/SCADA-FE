@@ -4,13 +4,13 @@ interface Props {
 }
 
 const SearchInput = ({ searchText, setSearchText }: Props) => (
-  <div className="bg-gray-100 p-2 rounded">
+  <div className=" rounded">
     <input
       type="text"
       placeholder="Cari laporan..."
       value={searchText}
       onChange={(e) => setSearchText(e.target.value)}
-      className="w-full p-2 rounded border"
+      className="w-full p-2 rounded shadow bg-gray-100 focus:outline-none"
     />
   </div>
 );

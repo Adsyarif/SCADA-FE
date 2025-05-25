@@ -118,6 +118,8 @@ const ReportCase = () => {
             }
           `}</style>
         </div>
+      ) : !supervisor?.data ? (
+        <p>Cannot make report</p>
       ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <h1 className="text-2xl font-bold text-center">Buat Laporan</h1>

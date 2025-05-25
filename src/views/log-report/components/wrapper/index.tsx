@@ -1,14 +1,16 @@
 import { ListDateItem, Title } from "@/components";
-// import { DataProps } from "@/pages/list-operator/log-report/[id]";
+import { UserNameInterface } from "@/context";
+import { useListReport } from "@/views/report-menu/hooks";
 
-// const LogReportWrapper = ({ name, rtu, report }: DataProps) => {
-const LogReportWrapper = () => {
+const LogReportWrapper = ({ userId, userName }: UserNameInterface) => {
+  const { data: reports, error, isLoading } = useListReport(userId || "");
+
   return (
     <div className="flex grow">
       <div className="grow w-full bg-whte">
         <Title text={"Log Report"} isButton={true} />
         <div className="h-14 flex items-center justify-center">
-          <h1 className="font-bold text-xl">Pa Malik - RTU1</h1>
+          <h1 className="font-bold text-xl">{userName}</h1>
         </div>
         <div className="">
           <ListDateItem

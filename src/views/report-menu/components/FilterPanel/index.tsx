@@ -9,9 +9,12 @@ interface Props {
   filterCategory: string;
   filterReportTo: string;
   filterDate: string;
+  filterStatus: string;
+  statusOptions: string[];
   setFilterCategory: (value: string) => void;
   setFilterReportTo: (value: string) => void;
   setFilterDate: (value: string) => void;
+  setFilterStatus: (value: string) => void;
   resetFilters: () => void;
 }
 
@@ -26,13 +29,16 @@ const FilterPanel = ({
   setFilterReportTo,
   setFilterDate,
   resetFilters,
+  setFilterStatus,
+  filterStatus,
+  statusOptions,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   if (isLoading) return null;
 
   return (
-    <div className="bg-white rounded shadow border">
+    <div className="bg-white rounded shadow">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex justify-between items-center px-4 py-3 font-semibold text-left"
@@ -63,15 +69,15 @@ const FilterPanel = ({
               Reset Filter
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium">Kategori</label>
+          <div className="grid flex:col gap-4">
+            <div className="border-b border-gray-500">
+              <label className="text-sm">Kategori</label>
               <select
                 value={filterCategory}
                 onChange={(e) => setFilterCategory(e.target.value)}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 rounded focus:outline-none"
               >
-                <option value="">Semua Kategori</option>
+                <option value="">Semua</option>
                 {categoryOptions.map((cat, idx) => (
                   <option key={idx} value={cat}>
                     {cat}
@@ -79,14 +85,14 @@ const FilterPanel = ({
                 ))}
               </select>
             </div>
-            <div>
-              <label className="block text-sm font-medium">Lapor Kepada</label>
+            <div className="border-b border-gray-500">
+              <label className="text-sm">Lapor Kepada</label>
               <select
                 value={filterReportTo}
                 onChange={(e) => setFilterReportTo(e.target.value)}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 rounded focus:outline-none"
               >
-                <option value="">Semua Orang</option>
+                <option value="">Semua</option>
                 {reportToOptions.map((name) => (
                   <option key={name} value={name}>
                     {name}
@@ -94,13 +100,28 @@ const FilterPanel = ({
                 ))}
               </select>
             </div>
-            <div>
-              <label className="block text-sm font-medium">Tanggal</label>
+            <div className="border-b border-gray-500">
+              <label className="block text-sm">Status</label>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="w-full p-2 rounded focus:outline-none"
+              >
+                <option value="">SEMUA</option>
+                {statusOptions.map((name) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="border-b border-gray-500">
+              <label className="block text-sm">Tanggal</label>
               <input
                 type="date"
                 value={filterDate}
                 onChange={(e) => setFilterDate(e.target.value)}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 rounded focus:outline-none"
               />
             </div>
           </div>

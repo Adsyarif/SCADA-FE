@@ -1,26 +1,22 @@
+import { Layout } from "@/components";
 import { AppContext } from "@/context";
 import { LogReportWrapper } from "@/views";
-import { Layout } from "lucide-react";
-import { useContext } from "react";
+import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
 
 const LogReport = () => {
+  const router = useRouter();
+  const id = router.query.id?.toString()!;
   const { selectedUser } = useContext(AppContext);
+  const [currentUser, setCurrentUser] = useState<string>("");
 
-  console.log(selectedUser);
+  useEffect(() => {
+    if (selectedUser) {
+      setCurrentUser(selectedUser?.userName);
+    }
+  }, [selectedUser]);
 
-  if (selectedUser === undefined || selectedUser === null) {
-    return <p>User belum membuat laporan</p>;
-  }
-  return (
-    <>
-      <div>
-        <LogReportWrapper
-          userId={selectedUser.userId}
-          userName={selectedUser.userName}
-        />
-      </div>
-    </>
-  );
+  return <LogReportWrapper userId={id} userName={currentUser} />;
 };
 
 export default LogReport;

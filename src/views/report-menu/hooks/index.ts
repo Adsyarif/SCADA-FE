@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useListReport = (userId: string) => {
   return useQuery<ReportListResponseProps, Error>({
-    queryKey: ["report", "list", userId], // tambahkan userId agar tidak bentrok antar user
+    queryKey: ["report", "list", userId],
     queryFn: () =>
       axiosInstance
         .get<ReportListResponseProps>(`/api/reports/get-report/${userId}`)

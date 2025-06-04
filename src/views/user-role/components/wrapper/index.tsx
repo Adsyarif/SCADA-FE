@@ -36,11 +36,12 @@ export function UserRoleWrapper() {
             .then((res) => res.data)
       });
 
+      console.log(`ini data dari`,paginated)
       const tableData: UserRole[] = paginated
       ? paginated.data.map((r) => ({
           id: r.id,
           name: r.roleName,
-          permissions:  r.permissions.map((p) => p.permission.permissionName),
+          permissions:  r.permissions.map((p) => p?.permission?.permissionName).filter(Boolean),
         }))
       : [];
   
@@ -85,6 +86,7 @@ export function UserRoleWrapper() {
                 onView={handleView}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
+                
               />  
             </>
           )}

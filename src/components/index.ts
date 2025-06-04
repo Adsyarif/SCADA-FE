@@ -6,3 +6,4 @@ export * from "./confirmBox";
 export * from "./resultResponse";
 export * from "./schedule-list";
 export * from "./table/component";
+export * from "./loading-page";

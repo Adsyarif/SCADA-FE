@@ -1,4 +1,3 @@
-// components/UserRoleForm.tsx
 import React from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -7,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import axiosInstance from '@/api/axiosClient';
 import type { AxiosResponse } from 'axios';
 import { RoleFormData, roleSchema } from '../../schema';
-import { Button, Input, Title } from '@/components';
+import { Button, Input, LoadingPage, Title } from '@/components';
 
 type Permission = { id: string; permissionName: string };
 
@@ -46,9 +45,10 @@ export function UserRoleForm() {
     createRole.mutate(data);
   };
 
-  if (permsLoading) return console.log('loading permission')
+  if (permsLoading) return <LoadingPage />;
+
   if (permsError)
-    return console.log(`Error loading perms: ${permsError.message}`)
+    return <div>Error loading permissions: {permsError.message}</div>;
 
   return (
     <div className="w-full">
@@ -70,7 +70,6 @@ export function UserRoleForm() {
         )}
       </div>
 
-      {/* Permissions */}
       <div>
         <p className="font-medium">Permissions</p>
         <div className="mt-2 overflow-y-auto p-3 rounded space-y-2">
@@ -91,7 +90,6 @@ export function UserRoleForm() {
         )}
       </div>
 
-      {/* Submit */}
       <Button
         type="submit"
         disabled={createRole.isPending}

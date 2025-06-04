@@ -1,10 +1,10 @@
 import { Layout } from "@/components";
+import { RtuConfigurationWrapper } from "@/views";
 import React from "react";
-import {RTUConfigurationWrapper} from "@/views";
 
 export default function Index() {
     return (
-        <RTUConfigurationWrapper />
+        <RtuConfigurationWrapper />
     )
 }
 

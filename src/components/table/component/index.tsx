@@ -1,22 +1,35 @@
 import { useMemo, useState } from "react"
 import { ArrowLeft, ArrowRight, Eye, Pencil, Trash } from "lucide-react"
 import { TableProps } from "../type"
+import { LoadingPage } from "@/components/loading-page"
 
 export function Table<T extends { id: string | number }>({
   data,
   columns,
   rowsPerPage = 5,
+  isLoading = false,
+  pagination,
   onView,
   onEdit,
   onDelete,
 }: TableProps<T>) {
-  const [page, setPage] = useState(1)
+  const [internalPage, setInternalPage] = useState(1)
+  const page = pagination?.page ?? internalPage
+  const limit = pagination?.limit ?? rowsPerPage
+  const total = pagination?.total ?? data.length
   const pageCount = Math.ceil(data.length / rowsPerPage)
 
-  const currentData = useMemo(
-    () => data.slice((page - 1) * rowsPerPage, page * rowsPerPage),
-    [data, page, rowsPerPage]
-  )
+  const displayData = useMemo(() => {
+    if (pagination) return data;
+    const start = (page - 1) * limit;
+    return data.slice(start, start + limit);
+  }, [data, page, limit, pagination]);
+
+  if (isLoading) {
+    return (
+      <LoadingPage />
+    );
+  }
 
   return (
     <div className="overflow-x-auto">
@@ -37,58 +50,71 @@ export function Table<T extends { id: string | number }>({
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {currentData.map((row) => (
-            <tr key={String(row.id)}>
+          {displayData.map((row) => (
+            <tr key={row.id} className="hover:bg-gray-50">
               {columns.map((col) => {
-                const value = row[col.accessor]
+                const value = row[col.accessor];
                 return (
                   <td
                     key={String(col.accessor)}
-                    className="px-4 py-2 whitespace-nowrap text-center"
+                    className="px-4 py-2 whitespace-nowrap text-sm text-gray-700"
                   >
                     {col.cell ? col.cell(value, row) : String(value)}
                   </td>
-                )
+                );
               })}
-
-              <td className="px-4 py-2 whitespace-nowrap text-sm font-medium space-x-2 text-gray-500 text-center">
-                <button
-                  onClick={() => onView?.(row)}
-                  className="px-2 py-1 rounded-md bg-blue-200 hover:bg-blue-300"
-                >
-                  <Eye size={16} />
-                </button>
-                <button
-                  onClick={() => onEdit?.(row)}
-                  className="px-2 py-1 rounded-md bg-green-200 hover:bg-green-300"
-                >
-                  <Pencil size={16} />
-                </button>
-                <button
-                  onClick={() => onDelete?.(row)}
-                  className="px-2 py-1 rounded-md bg-red-200 hover:bg-red-300"
-                >
-                  <Trash size={16} />
-                </button>
+              <td className="px-4 py-2 whitespace-nowrap text-sm font-medium space-x-2 text-center">
+                {onView && (
+                  <button
+                    onClick={() => onView(row)}
+                    className="px-2 py-1 rounded-md bg-blue-200 hover:bg-blue-300"
+                  >
+                    <Eye size={16} />
+                  </button>
+                )}
+                {onEdit && (
+                  <button
+                    onClick={() => onEdit(row)}
+                    className="px-2 py-1 rounded-md bg-green-200 hover:bg-green-300"
+                  >
+                    <Pencil size={16} />
+                  </button>
+                )}
+                {onDelete && (
+                  <button
+                    onClick={() => onDelete(row)}
+                    className="px-2 py-1 rounded-md bg-red-200 hover:bg-red-300"
+                  >
+                    <Trash size={16} />
+                  </button>
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <div className="flex items-center justify-between py-3">
+      <div className="mt-2 flex justify-end items-center space-x-2">
         <button
-          onClick={() => setPage((p) => Math.max(p - 1, 1))}
+          onClick={() =>
+            pagination
+              ? pagination.onChangePage(Math.max(page - 1, 1))
+              : setInternalPage((p) => Math.max(p - 1, 1))
+          }
           disabled={page === 1}
           className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
         >
           <ArrowLeft size={16} />
         </button>
-        <span>
+        <span className="text-sm text-gray-600">
           Page {page} of {pageCount}
         </span>
         <button
-          onClick={() => setPage((p) => Math.min(p + 1, pageCount))}
+          onClick={() =>
+            pagination
+              ? pagination.onChangePage(Math.min(page + 1, pageCount))
+              : setInternalPage((p) => Math.min(p + 1, pageCount))
+          }
           disabled={page === pageCount}
           className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
         >

@@ -10,6 +10,13 @@ export type TableProps<T> = {
     data: T[]
     columns: TableColumn<T>[]
     rowsPerPage?: number
+    isLoading?: boolean
+    pagination?: {
+        total: number
+        page: number
+        limit: number
+        onChangePage: (page: number) => void
+    }
     onEdit?: (row: T) => void
     onView?: (row: T) => void
     onDelete?: (row: T) => void

@@ -83,7 +83,7 @@ export function HomepageWrapper() {
             </MenuItems>
           )}
           {checkPermission("manage:users") && (
-            <MenuItems href="/" menuName="Daftar User">
+            <MenuItems href="/user" menuName="Daftar User">
               <User2Icon />
             </MenuItems>
           )}

@@ -29,8 +29,14 @@ const OperatorListWrapper = () => {
       userId: user.userId,
       userName: user.userName,
     });
-    router.push(`list-operator/log-report/${selectedUser?.userId}`);
   };
+
+  useEffect(() => {
+    if (selectedUser) {
+      // console.log(selectedUser);
+      router.push(`list-operator/log-report/${selectedUser.userId}`);
+    }
+  }, [selectedUser]);
 
   useEffect(() => {
     if (operators?.data) {

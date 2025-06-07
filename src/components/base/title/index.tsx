@@ -8,12 +8,16 @@ interface TitleProps {
 }
 
 const Title = ({ text, isButton, handleBackClick }: TitleProps) => {
+  const router = useRouter();
+
   return (
     <div className="flex px-5 relative h-[65px] w-full">
       {isButton && (
         <div
           className="absolute left-5 top-1/2 -translate-y-1/2 -translate-x-1/12"
-          onClick={handleBackClick}
+          onClick={ handleBackClick= () => {
+            router.back();}
+          }
         >
           <LucideArrowLeft />
         </div>

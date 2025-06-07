@@ -16,8 +16,8 @@ export function RtuList(props: RtuListProps) {
               </div>
             </div>
             <div className="flex flex-col gap-2 text-xs justify-start items-start">
-                <span>Radius: {rtuRadius}</span>
-                <span>Coordinates: {rtuCoordinates}</span>
+                <span>Radius:<br/> {rtuRadius}</span>
+                <span className="break-normal">Coordinates: <br/> {rtuCoordinates}</span>
             </div>
             <div className="flex items-center gap-2">
                 {onEdit && (

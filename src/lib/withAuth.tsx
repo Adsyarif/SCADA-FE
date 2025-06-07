@@ -19,8 +19,10 @@ const withAuth = <P extends object>(WrappedComponent: ComponentType<P>, required
       }
 
       if (!session) {
-        router.push('/login');
+        router.push('/');
         return;
+      } else {
+        router.prefetch('/homepage')
       }
 
       const token = session?.accessToken;

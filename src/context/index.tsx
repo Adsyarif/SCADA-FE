@@ -20,25 +20,14 @@ interface UserNameProviderProps {
 }
 
 export const AppProvider = ({ children }: UserNameProviderProps) => {
-  const [selectedUser, setSelectedUserState] =
-    useState<UserNameInterface | null>(() => {
-      if (typeof window !== "undefined") {
-        const storedUser = localStorage.getItem("selectedUser");
-        return storedUser ? JSON.parse(storedUser) : null;
-      }
-      return null;
-    });
+  const [selectedUser, setSelectedUser] = useState<UserNameInterface | null>(
+    null
+  );
 
-  const setSelectedUser = (user: UserNameInterface | null) => {
-    setSelectedUserState(user);
-    if (user) {
-      localStorage.setItem("selectedUser", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("selectedUser");
-    }
+  const value = {
+    selectedUser,
+    setSelectedUser,
   };
-
-  const value = { selectedUser, setSelectedUser };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

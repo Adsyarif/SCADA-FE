@@ -125,6 +125,7 @@ export function RtuConfigurationForm({ initialData }: RtuFormProps) {
           <Input
             label="Latitude"
             type="number"
+            step="any"
             {...register("latitude", { valueAsNumber: true })}
             className="border p-2 rounded w-full"
           />
@@ -132,6 +133,7 @@ export function RtuConfigurationForm({ initialData }: RtuFormProps) {
         <div>
           <Input
             label="Longitude"
+            step="any"
             {...register("longitude", { valueAsNumber: true })}
             className="border p-2 rounded w-full"
           />

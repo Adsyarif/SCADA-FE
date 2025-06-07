@@ -16,7 +16,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     } = props;
 
     return (
-      <div className={twMerge("space-y-1", containerClassName)}>
+      <div className={twMerge("space-y-1 w-full", containerClassName)}>
         {label && (
           <p className={twMerge("text-sm text-gray-600", labelClassName)}>
             {label}

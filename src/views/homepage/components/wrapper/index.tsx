@@ -103,7 +103,7 @@ export function HomepageWrapper() {
             </MenuItems>
           )}
           {checkPermission("manage:settings") && (
-            <MenuItems href="/" menuName="Pengaturan">
+            <MenuItems href="/shift-configuration" menuName="Pengaturan Shift">
               <Settings />
             </MenuItems>
           )}

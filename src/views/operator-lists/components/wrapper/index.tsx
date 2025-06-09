@@ -108,13 +108,13 @@ const OperatorListWrapper = () => {
             )}
           </div>
         </div>
-        {operators?.data.map((ops, idx) => {
+        {/* {operators?.data.map((ops, idx) => {
           return (
             <div key={idx}>
               <div>{ops.operatorName}</div>
             </div>
           );
-        })}
+        })} */}
       </div>
     </div>
   );

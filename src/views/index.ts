@@ -9,3 +9,4 @@ export * from "./operator-schedule";
 export * from "./user-role";
 export * from "./user-management";
 export * from "./rtu-configuration";
+export * from "./chart-example";

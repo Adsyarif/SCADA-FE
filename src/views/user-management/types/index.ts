@@ -28,6 +28,7 @@ export type User = {
   created_at: string;
   role: { id: string; roleName: string };
   userSites: Array<{
+    id: string
     rtuConfiguration: { id: string; rtuName: string };
     checkInStatus: boolean;
   }>;

@@ -33,7 +33,7 @@ const withAuth = <P extends object>(WrappedComponent: ComponentType<P>, required
 
           if (decodedToken.exp && decodedToken.exp < currentTime) {
             signOut({ redirect: false });
-            router.push('/login');
+            router.push('/');
             return;
           }
 

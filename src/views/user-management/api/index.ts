@@ -73,3 +73,39 @@ export function useDeleteUser() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["users"] }),
   });
 }
+
+interface UserSiteWithUser {
+  id: string;
+  userId: string;
+  rtuId: string;
+  checkInStatus: boolean;
+  user: { id: string; username: string; employee_number: string };
+}
+
+export function useUserSitesByRtu(rtuId: string) {
+  return useQuery<UserSiteWithUser[], Error>({
+    queryKey: ["userSites", rtuId],
+    queryFn: async () => {
+      const res = await axiosInstance.get<PaginatedUsers>("/users", {
+        params: { page: 1, limit: 1000 },
+      });
+      const users = res.data.data as (User & { userSites: any[] })[];
+      return users
+        .flatMap((u) =>
+          u.userSites.map((us) => ({
+            id: us.id,
+            userId: u.id,
+            rtuId: us.rtuConfiguration.id,
+            checkInStatus: us.checkInStatus,
+            user: {
+              id: u.id,
+              username: u.username,
+              employee_number: u.employee_number,
+            },
+          }))
+        )
+        .filter((us) => us.rtuId === rtuId);
+    },
+    enabled: Boolean(rtuId),
+  });
+}

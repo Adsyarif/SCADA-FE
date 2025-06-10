@@ -57,6 +57,11 @@ export function HomepageWrapper() {
               <Calendar1 />
             </MenuItems>
           )}
+          {checkPermission("manage:schedule") && (
+            <MenuItems href="/schedule-management" menuName="Manajemen Jadwal">
+              <Calendar1 />
+            </MenuItems>
+          )}
           {checkPermission("staff:attendance") && (
             <MenuItems href="/attendance" menuName="Absensi">
               <CalendarCheck />

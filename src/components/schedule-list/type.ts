@@ -1,8 +1,11 @@
 export type ScheduleListProps = {
-    day: string;
-    date: string;
-    time: string;
-    shiftTime?: string[];
-    onSchedule?: boolean;
-
-}
+   rtuName: string
+   shiftName: string
+   workDays: string
+   startTime: string
+   endTime: string
+   employeeTotal: number
+   onEdit?: () => void;
+   onDelete?: () => void;
+   key?: string
+} & React.HTMLAttributes<HTMLDivElement>;

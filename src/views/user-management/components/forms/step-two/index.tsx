@@ -42,30 +42,6 @@ export function StepTwo({ rtus }: StepTwoProps) {
           </div>
         );
       })}
-
-      {fields.map((field, index) => {
-        const rtu = rtus.find(r => r.id === field.rtuId);
-        return (
-          <div key={field.id} className="mt-2">
-            <label className="mr-2">Enable check-in for {rtu?.rtuName}:</label>
-            <Controller
-              control={control}
-              name={`rtuAssignments.${index}.checkInStatus`}
-              defaultValue={field.checkInStatus}
-              render={({ field: { value, onChange } }) => (
-                <select
-                  value={value ? "true" : "false"}
-                  onChange={e => onChange(e.target.value === "true")}
-                  className="border-gray-300 rounded-md"
-                >
-                  <option value="true">True</option>
-                  <option value="false">False</option>
-                </select>
-              )}
-            />
-          </div>
-        );
-      })}
     </div>
   );
 }

@@ -44,13 +44,11 @@ export function ScheduleForm({ defId }: Props) {
   const rtuId = watch('rtuId');
   const days  = watch('daysOfWeek');
 
-  // fetch userSites for pick list
   const { data: userSites = [] } = useUserSitesByRtu(rtuId);
 
-  // load existing definition if editing
   const { data: existing, isLoading: loadingDef } = useQuery({
     queryKey: ['definition', defId],
-    queryFn: () => axiosInstance.get(`/schedule-defs/${defId}`).then(r => r.data),
+    queryFn: () => axiosInstance.get(`/schedule-definition/${defId}`).then(r => r.data),
     enabled: isEdit,
   });
 
@@ -65,7 +63,6 @@ export function ScheduleForm({ defId }: Props) {
     }
   }, [existing, reset]);
 
-  // mutations
   const createDef = useCreateDefinition();
   const updateDef = useUpdateDefinition(defId!);
 

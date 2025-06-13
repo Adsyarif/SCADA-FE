@@ -10,6 +10,7 @@ import axiosInstance from "@/api/axiosClient";
 import type { AxiosResponse } from "axios";
 import { RtuFormData, rtuSchema } from "../../schema";
 import { Input, Title } from "@/components";
+import { useCreateRTU, useUpdateRtuConfiguration } from "../../api";
 
 const MapContainer = dynamic(
   () => import("react-leaflet").then((mod) => mod.MapContainer),
@@ -59,22 +60,17 @@ export function RtuConfigurationForm({ initialData }: RtuFormProps) {
   const longitude = watch("longitude");
   const radius    = watch("radius");
 
-  const createRTU = useMutation<AxiosResponse<any>, Error, RtuFormData>({
-    mutationFn: (data) =>
-      axiosInstance.post("/rtu-configuration", data),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["rtuConfigurations"] });
-      router.push("/rtu-configuration");
-    },
-  })
+  const createRTU = useCreateRTU()
+  const updateRTU = useUpdateRtuConfiguration(initialData?.id!)
 
   const onSubmit = (data: RtuFormData) => {
-    if (isEdit && initialData?.id) {
-      createRTU.mutate({ ...data, id: initialData.id });
+    if (isEdit) {
+      updateRTU.mutate(data)
     } else {
-      createRTU.mutate(data);
+      createRTU.mutate(data)
     }
   };
+  
   const handleMapClick = (e: any) => {
     const { lat, lng } = e.latlng;
     setValue("latitude", lat);

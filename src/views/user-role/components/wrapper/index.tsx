@@ -1,11 +1,11 @@
-import { Table, Title } from "@/components";
+import { LoadingPage, Table, Title } from "@/components";
 import { TableColumn } from "@/components/table";
-import { PaginatedRoles, UserRole } from "../../types";
+import { UserRole } from "../../types";
 import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import axiosInstance from "@/api/axiosClient";
+import { useDeleteUserRoles, usePaginatedUserRoles } from "../../api";
 
 const columns: TableColumn<UserRole>[] = [
     { header: 'Role Name', accessor: 'name'}
@@ -23,20 +23,8 @@ export function UserRoleWrapper() {
         isLoading,
         isError,
         error,
-      } = useQuery<
-        PaginatedRoles,
-        Error,
-        PaginatedRoles,
-        ['user-roles', number]
-      >({
-        queryKey: ['user-roles', page],
-        queryFn: () =>
-          axiosInstance
-            .get<PaginatedRoles>(`/user-role?page=${page}&limit=${limit}`)
-            .then((res) => res.data)
-      });
+      } = usePaginatedUserRoles(page, limit)
 
-      console.log(`ini data dari`,paginated)
       const tableData: UserRole[] = paginated
       ? paginated.data.map((r) => ({
           id: r.id,
@@ -48,13 +36,7 @@ export function UserRoleWrapper() {
     const handleAdd = () => router.push('/user-role/create');
     const handleEdit = (role: UserRole) =>
       router.push(`/user-role/${role.id}/edit`);
-    const handleDelete = (role: UserRole) => {
-      if (confirm(`Delete role ${role.name}?`)) {
-        axiosInstance.delete(`/user-role/${role.id}`).then(() => {
-          qc.invalidateQueries({ queryKey: ['user-roles'] });
-        });
-      }
-    };
+    const handleDelete = useDeleteUserRoles
  
     return (
         <div className="flex flex-col grow">
@@ -71,7 +53,7 @@ export function UserRoleWrapper() {
             </button>
           </div>
   
-          {isLoading && <p>Loading roles…</p>}
+          {isLoading && <LoadingPage />}
           {isError && (
             <p className="text-red-600">Error: {(error as any).message}</p>
           )}

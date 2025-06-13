@@ -1,7 +1,13 @@
-import { useMemo, useState } from "react"
-import { ArrowLeft, ArrowRight, Eye, Pencil, Trash } from "lucide-react"
-import { TableProps } from "../type"
-import { LoadingPage } from "@/components/loading-page"
+import React, { useMemo, useState } from "react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Eye,
+  Pencil,
+  Trash,
+} from "lucide-react";
+import { LoadingPage } from "@/components/loading-page";
+import { TableProps } from "../type";
 
 export function Table<T extends { id: string | number }>({
   data,
@@ -9,27 +15,50 @@ export function Table<T extends { id: string | number }>({
   rowsPerPage = 5,
   isLoading = false,
   pagination,
+
+  currentPage,
+  totalItems,
+  onPageChange,
+
   onView,
   onEdit,
   onDelete,
 }: TableProps<T>) {
-  const [internalPage, setInternalPage] = useState(1)
-  const page = pagination?.page ?? internalPage
-  const limit = pagination?.limit ?? rowsPerPage
-  const total = pagination?.total ?? data.length
-  const pageCount = Math.ceil(data.length / rowsPerPage)
+  const [internalPage, setInternalPage] = useState(1);
+
+  const page = pagination
+    ? pagination.page
+    : currentPage ?? internalPage;
+  const limit = pagination
+    ? pagination.limit
+    : rowsPerPage;
+  const total = pagination
+    ? pagination.total
+    : totalItems ?? data.length;
+
+  const pageCount = Math.ceil(total / limit);
 
   const displayData = useMemo(() => {
     if (pagination) return data;
+    if (currentPage != null && totalItems != null && onPageChange) {
+      const start = (page - 1) * limit;
+      return data.slice(start, start + limit);
+    }
     const start = (page - 1) * limit;
     return data.slice(start, start + limit);
-  }, [data, page, limit, pagination]);
+  }, [data, page, limit, pagination, currentPage, totalItems, onPageChange]);
 
-  if (isLoading) {
-    return (
-      <LoadingPage />
-    );
-  }
+  if (isLoading) return <LoadingPage />;
+
+  const changePage = (to: number) => {
+    if (pagination) {
+      pagination.onChangePage(to);
+    } else if (onPageChange) {
+      onPageChange(to);
+    } else {
+      setInternalPage(to);
+    }
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -94,27 +123,22 @@ export function Table<T extends { id: string | number }>({
         </tbody>
       </table>
 
+      {/* Pagination controls */}
       <div className="mt-2 flex justify-end items-center space-x-2">
         <button
-          onClick={() =>
-            pagination
-              ? pagination.onChangePage(Math.max(page - 1, 1))
-              : setInternalPage((p) => Math.max(p - 1, 1))
-          }
+          onClick={() => changePage(Math.max(page - 1, 1))}
           disabled={page === 1}
           className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
         >
           <ArrowLeft size={16} />
         </button>
+
         <span className="text-sm text-gray-600">
           Page {page} of {pageCount}
         </span>
+
         <button
-          onClick={() =>
-            pagination
-              ? pagination.onChangePage(Math.min(page + 1, pageCount))
-              : setInternalPage((p) => Math.min(p + 1, pageCount))
-          }
+          onClick={() => changePage(Math.min(page + 1, pageCount))}
           disabled={page === pageCount}
           className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
         >
@@ -122,5 +146,5 @@ export function Table<T extends { id: string | number }>({
         </button>
       </div>
     </div>
-  )
+  );
 }

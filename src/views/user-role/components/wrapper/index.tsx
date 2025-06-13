@@ -46,7 +46,6 @@ export function UserRoleWrapper() {
       : [];
   
     const handleAdd = () => router.push('/user-role/create');
-    const handleView = (role: UserRole) => console.log('View', role);
     const handleEdit = (role: UserRole) =>
       router.push(`/user-role/${role.id}/edit`);
     const handleDelete = (role: UserRole) => {
@@ -83,7 +82,6 @@ export function UserRoleWrapper() {
                 data={tableData}
                 columns={columns}
                 rowsPerPage={limit}
-                onView={handleView}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
                 

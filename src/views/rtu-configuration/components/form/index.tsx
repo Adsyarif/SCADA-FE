@@ -1,13 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
-import axiosInstance from "@/api/axiosClient";
-import type { AxiosResponse } from "axios";
 import { RtuFormData, rtuSchema } from "../../schema";
 import { Input, Title } from "@/components";
 import { useCreateRTU, useUpdateRtuConfiguration } from "../../api";
@@ -70,7 +67,7 @@ export function RtuConfigurationForm({ initialData }: RtuFormProps) {
       createRTU.mutate(data)
     }
   };
-  
+
   const handleMapClick = (e: any) => {
     const { lat, lng } = e.latlng;
     setValue("latitude", lat);

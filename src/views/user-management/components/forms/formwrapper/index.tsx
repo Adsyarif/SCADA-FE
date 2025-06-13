@@ -1,6 +1,6 @@
 import { Button, LoadingPage, Title } from "@/components";
 import { useCreateUser, useRtuConfigurations, useUserRoles } from "@/views/user-management/api";
-import { UserFormValues, userSchema } from "@/views/user-management/schema";
+import { updateUserSchema, UpdateUserValues, UserFormValues, userSchema } from "@/views/user-management/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -15,16 +15,24 @@ interface UserFormWrapperProps {
   onSubmit?: (values: UserFormValues) => void;
 }
 export function UserFormWrapper({ initialValues, onSubmit }: UserFormWrapperProps) {
-  const methods = useForm<UserFormValues>({
-    resolver: zodResolver(userSchema),
-    defaultValues: { rtuAssignments: [], ...(initialValues ?? {}) },
+  const router = useRouter();
+  const isEdit = Boolean(initialValues?.id);
+
+  const methods = useForm<UserFormValues | UpdateUserValues>({
+    resolver: zodResolver(isEdit ? updateUserSchema: userSchema),
+    defaultValues: isEdit
+      ? initialValues
+      : {
+        rtuAssignments: []
+      }
   });
+
+  const values = methods.getValues()
+
   const [step, setStep] = useState(1);
   const { data: roles, isLoading: rolesLoading } = useUserRoles();
   const { data: rtus, isLoading: rtusLoading } = useRtuConfigurations();
   const createMutation = useCreateUser();
-  const router = useRouter();
-  const isEdit = Boolean(initialValues?.id);
 
   useEffect(() => {
     if (initialValues) {

@@ -28,7 +28,6 @@ export function UserFormWrapper({ initialValues, onSubmit }: UserFormWrapperProp
   });
 
   const values = methods.getValues()
-
   const [step, setStep] = useState(1);
   const { data: roles, isLoading: rolesLoading } = useUserRoles();
   const { data: rtus, isLoading: rtusLoading } = useRtuConfigurations();

@@ -45,7 +45,6 @@ export function ScheduleForm({ defId }: Props) {
   const days  = watch('daysOfWeek');
 
   const { data: userSites = [] } = useUserSitesByRtu(rtuId);
-
   const { data: existing, isLoading: loadingDef } = useQuery({
     queryKey: ['definition', defId],
     queryFn: () => axiosInstance.get(`/schedule-definition/${defId}`).then(r => r.data),
@@ -62,7 +61,6 @@ export function ScheduleForm({ defId }: Props) {
       });
     }
   }, [existing, reset]);
-
   const createDef = useCreateDefinition();
   const updateDef = useUpdateDefinition(defId!);
 

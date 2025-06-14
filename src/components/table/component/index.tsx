@@ -15,11 +15,9 @@ export function Table<T extends { id: string | number }>({
   rowsPerPage = 5,
   isLoading = false,
   pagination,
-
   currentPage,
   totalItems,
   onPageChange,
-
   onView,
   onEdit,
   onDelete,
@@ -132,7 +130,6 @@ export function Table<T extends { id: string | number }>({
         >
           <ArrowLeft size={16} />
         </button>
-
         <span className="text-sm text-gray-600">
           Page {page} of {pageCount}
         </span>

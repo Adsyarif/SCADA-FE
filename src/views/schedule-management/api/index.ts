@@ -22,6 +22,7 @@ export function useUpdateDefinition(id: string) {
   const qc = useQueryClient();
   return useMutation<Definition, Error, DefinitionFormData>({
     mutationFn: dto => axios.patch(`/schedule-definition/${id}`, dto).then(r => r.data),
+
     onSuccess: () => qc.invalidateQueries({ queryKey: ['defs'] }),
   });
 }

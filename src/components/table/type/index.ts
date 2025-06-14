@@ -5,19 +5,23 @@ export type TableColumn<T> = {
     accessor: keyof T
     cell?: (value: T[keyof T], row: T) => ReactNode
 }
+export type PaginationProps = {
+  page: number;
+  limit: number;
+  total: number;
+  onChangePage: (page: number) => void;
+}
 
 export type TableProps<T> = {
-    data: T[]
-    columns: TableColumn<T>[]
-    rowsPerPage?: number
-    isLoading?: boolean
-    pagination?: {
-        total: number
-        page: number
-        limit: number
-        onChangePage: (page: number) => void
-    }
-    onEdit?: (row: T) => void
-    onView?: (row: T) => void
-    onDelete?: (row: T) => void
+  data: T[];
+  columns: TableColumn<T>[];
+  rowsPerPage?: number;
+  isLoading?: boolean;
+  pagination?: PaginationProps;
+  currentPage?: number;
+  totalItems?: number;
+  onPageChange?: (page: number) => void;
+  onView?: (row: T) => void;
+  onEdit?: (row: T) => void;
+  onDelete?: (row: T) => void;
 }

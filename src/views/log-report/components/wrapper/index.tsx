@@ -4,7 +4,6 @@ import { useListReport } from "@/views/report-menu/hooks";
 
 const LogReportWrapper = ({ userId, userName }: UserNameInterface) => {
   const { data: reports, error, isLoading } = useListReport(userId || "");
-  console.log(reports);
 
   return (
     <div className="flex grow">

@@ -21,9 +21,6 @@ const ReportMenu = () => {
   const checkPermission = (permission: string) => {
     return userPermissions.includes(permission);
   };
-
-  console.log(reports);
-
   const [searchText, setSearchText] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [filterReportTo, setFilterReportTo] = useState("");

@@ -6,9 +6,7 @@ import { RevisionSection } from "@/components";
 
 const ReportDetail = ({ reportDetailId }: ReportDetailInterface) => {
   const { data: session } = useSession();
-
   const userRole = session?.user.role;
-
   const {
     data: reportDetail,
     isLoading,
@@ -84,3 +82,4 @@ const ReportDetail = ({ reportDetailId }: ReportDetailInterface) => {
 };
 
 export default ReportDetail;
+

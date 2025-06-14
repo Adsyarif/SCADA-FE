@@ -22,6 +22,7 @@ export function HomepageWrapper() {
   const userName = session?.user.name;
   const role = session?.user.role;
 
+
   const checkPermission = (permission: string) => {
     return userPermissions.includes(permission);
   };

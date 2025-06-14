@@ -58,7 +58,7 @@ export function useUser(userId: string) {
 export function useUpdateUser(userId: string) {
   const qc = useQueryClient();
   return useMutation<void, Error, UserFormValues>({
-    mutationFn: (data) => axiosInstance.put(`/users/${userId}`, data).then(() => {}),
+    mutationFn: (data) => axiosInstance.patch(`/users/${userId}`, data).then(() => {}),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["users"]});
       qc.invalidateQueries({ queryKey: ["user", userId] });

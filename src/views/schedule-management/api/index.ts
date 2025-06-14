@@ -1,4 +1,3 @@
-// src/views/schedule-management/api/index.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from '@/api/axiosClient';
 import type { Definition } from '../types';
@@ -22,7 +21,8 @@ export function useCreateDefinition() {
 export function useUpdateDefinition(id: string) {
   const qc = useQueryClient();
   return useMutation<Definition, Error, DefinitionFormData>({
-    mutationFn: dto => axios.put(`/schedule-definition/${id}`, dto).then(r => r.data),
+    mutationFn: dto => axios.patch(`/schedule-definition/${id}`, dto).then(r => r.data),
+
     onSuccess: () => qc.invalidateQueries({ queryKey: ['defs'] }),
   });
 }

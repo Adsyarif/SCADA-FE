@@ -20,10 +20,22 @@ export function HomepageWrapper() {
   const userPermissions = session?.user?.permissions || [];
   console.log(`ini isi dari dari userPermissions: `, userPermissions);
   const userName = session?.user.name;
+  const role = session?.user.role;
 
   const checkPermission = (permission: string) => {
     return userPermissions.includes(permission);
   };
+
+  const getTime = () => {
+    const date = new Date();
+
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    return `${hours}:${minutes} WIB`;
+  };
+
+  console.log(getTime());
 
   return (
     <div className="flex flex-col">
@@ -32,7 +44,7 @@ export function HomepageWrapper() {
           <div>
             <h1>Hi, {userName}</h1>
           </div>
-          <div>00:00 AM</div>
+          <div>{getTime()}</div>
         </div>
         <div className="grow flex flex-col justify-center">
           <div className="grow flex justify-center my-4 items-center">

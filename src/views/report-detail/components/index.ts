@@ -1,1 +1,1 @@
-export * from "./wrapper";
+export { default as ReportDetail } from "./wrapper";

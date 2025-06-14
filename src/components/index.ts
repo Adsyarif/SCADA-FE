@@ -8,4 +8,4 @@ export * from "./schedule-list";
 export * from "./table/component";
 export * from "./loading-page";
 export * from "./shift-list";
-
+export { default as RevisionSection } from "./revisionSection";

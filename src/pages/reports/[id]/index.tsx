@@ -1,7 +1,7 @@
 import { Layout } from "@/components";
-import ReportMenu from "@/views/report-detail/components/wrapper";
 import { ReportDetailInterface } from "@/views/report-detail/type/reportDetail";
 import { useParams } from "next/navigation";
+import { ReportDetail } from "@/views";
 
 const ReportById = () => {
   const param = useParams();
@@ -11,11 +11,11 @@ const ReportById = () => {
     return <p>No report found</p>;
   }
 
-  const ReportDetail: ReportDetailInterface = {
+  const ReportDetailId: ReportDetailInterface = {
     reportDetailId: id,
   };
 
-  return <ReportMenu reportDetailId={ReportDetail.reportDetailId} />;
+  return <ReportDetail reportDetailId={ReportDetailId.reportDetailId} />;
 };
 
 export default ReportById;

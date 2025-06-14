@@ -1,6 +1,6 @@
+import { Layout } from "@/components";
 import { AppContext } from "@/context";
 import { LogReportWrapper } from "@/views";
-import { Layout } from "lucide-react";
 import { useContext } from "react";
 
 const LogReport = () => {

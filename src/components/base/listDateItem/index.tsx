@@ -24,7 +24,7 @@ const ListDateItem = ({
   };
 
   const shorterMessage = (str: string): string => {
-    const maxChar = 40;
+    const maxChar = 70;
     return str.length > maxChar ? str.slice(0, maxChar) + " ..." : str;
   };
 
@@ -53,7 +53,7 @@ const ListDateItem = ({
         <div
           className={`${colorStatus(
             status
-          )} w-18 h-13 py-1 rounded-xl flex flex-col justify-center items-center`}
+          )} w-24 h-15 py-1 rounded-xl flex flex-col justify-center items-center`}
         >
           <p className="text-xs text-white">{formattedDay}</p>
           <p className="text-white text-2xl">{formattedDate}</p>

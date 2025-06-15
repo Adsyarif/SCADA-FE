@@ -3,7 +3,8 @@ interface DateItemProps {
   reportName: string;
   reportDesc: string;
   page: string;
-  status: "review" | "approved" | "needRevision";
+  timeUpdate: Date;
+  status: "PENDING" | "REJECTED" | "APPROVED" | "REVISION";
 }
 
 const ListDateItem = ({
@@ -12,15 +13,17 @@ const ListDateItem = ({
   reportDesc,
   page,
   status,
+  timeUpdate,
 }: DateItemProps) => {
-  const colorStatus = (status: "review" | "approved" | "needRevision") => {
-    return (
-      {
-        review: "bg-[#5A56FF]",
-        approved: "bg-[#39C252]",
-        needRevision: "bg-[#FF7856]",
-      }[status] || "bg-gray-300"
-    );
+  const colorStatus = (
+    status: "PENDING" | "REJECTED" | "APPROVED" | "REVISION"
+  ) => {
+    return {
+      PENDING: "bg-[#5A56FF]",
+      APPROVED: "bg-[#39C252]",
+      REVISION: "bg-[#FF7856]",
+      REJECTED: "bg-[#FF0000]]",
+    }[status];
   };
 
   const shorterMessage = (str: string): string => {
@@ -28,8 +31,8 @@ const ListDateItem = ({
     return str.length > maxChar ? str.slice(0, maxChar) + " ..." : str;
   };
 
-  const getTime = () => {
-    const date = new Date();
+  const getTime = (timeUpdate: Date) => {
+    const date = new Date(timeUpdate);
     return {
       formattedDay: new Intl.DateTimeFormat("en-US", {
         weekday: "long",
@@ -45,7 +48,7 @@ const ListDateItem = ({
     };
   };
 
-  const { formattedDay, formattedTime, formattedDate } = getTime();
+  const { formattedDay, formattedTime, formattedDate } = getTime(timeUpdate);
 
   return (
     <div className="px-5 py-2">

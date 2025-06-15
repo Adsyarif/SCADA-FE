@@ -20,8 +20,6 @@ export function HomepageWrapper() {
   const userPermissions = session?.user?.permissions || [];
   console.log(`ini isi dari dari userPermissions: `, userPermissions);
   const userName = session?.user.name;
-  const role = session?.user.role;
-
 
   const checkPermission = (permission: string) => {
     return userPermissions.includes(permission);
@@ -35,8 +33,6 @@ export function HomepageWrapper() {
 
     return `${hours}:${minutes} WIB`;
   };
-
-  console.log(getTime());
 
   return (
     <div className="flex flex-col">

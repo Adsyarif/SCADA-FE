@@ -8,15 +8,18 @@ const LogReport = () => {
 
   console.log(selectedUser);
 
+  let emptyMessage = "";
+
   if (selectedUser === undefined || selectedUser === null) {
-    return <p>User belum membuat laporan</p>;
+    emptyMessage = "User belum membuat laporan";
   }
   return (
     <>
-      <div>
+      <div className="container flex-col justify-center">
         <LogReportWrapper
-          userId={selectedUser.userId}
-          userName={selectedUser.userName}
+          userId={selectedUser?.userId}
+          userName={selectedUser?.userName}
+          errMessage={emptyMessage}
         />
       </div>
     </>

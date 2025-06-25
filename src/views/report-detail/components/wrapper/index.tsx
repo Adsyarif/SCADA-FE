@@ -3,6 +3,7 @@ import { useDetailReport } from "../../hooks";
 import { ReportDetailInterface } from "../../type/reportDetail";
 import { Title } from "@/components";
 import { RevisionSection } from "@/components";
+import RevisionForm from "../revisionForm";
 
 const ReportDetail = ({ reportDetailId }: ReportDetailInterface) => {
   const { data: session } = useSession();
@@ -29,6 +30,7 @@ const ReportDetail = ({ reportDetailId }: ReportDetailInterface) => {
 
   console.log(reportDetail.data);
   console.log(reportCategoryName);
+  console.log(userRole);
 
   return (
     <div className="flex grow">
@@ -74,7 +76,7 @@ const ReportDetail = ({ reportDetailId }: ReportDetailInterface) => {
               />
             </svg>
           </div>
-          {userRole === "supervisor" && <RevisionSection />}
+          {userRole === "supervisor" && <RevisionForm />}
         </div>
       </div>
     </div>
@@ -82,4 +84,3 @@ const ReportDetail = ({ reportDetailId }: ReportDetailInterface) => {
 };
 
 export default ReportDetail;
-

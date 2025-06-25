@@ -14,3 +14,14 @@ export const useDetailReport = (reportId: string) => {
     enabled: !!reportId,
   });
 };
+
+export const approvedReport = (reportId: string, userId: string) => {
+  return useQuery<ReportListResponseProps, Error>({
+    queryKey: ["report", "approval"],
+    queryFn: () =>
+      axiosInstance
+        .put<ReportListResponseProps>(`/${reportId}/approve`, userId)
+        .then((res) => res.data),
+    enabled: !!reportId,
+  });
+};

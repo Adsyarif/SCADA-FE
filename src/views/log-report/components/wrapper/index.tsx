@@ -26,6 +26,7 @@ const LogReportWrapper = ({ userId, userName, errMessage }: UserProps) => {
       setReportLists(reports.data);
     }
   }, [reports]);
+
   const selectReport = (reportId: string) => {
     router.push(`/reports/${reportId}`);
   };

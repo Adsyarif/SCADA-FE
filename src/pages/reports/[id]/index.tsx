@@ -2,6 +2,7 @@ import { Layout } from "@/components";
 import { ReportDetailInterface } from "@/views/report-detail/type/reportDetail";
 import { useParams } from "next/navigation";
 import { ReportDetail } from "@/views";
+import ErrorBoundary from "@/views/report-detail/components/errorBoundary";
 
 const ReportById = () => {
   const param = useParams();
@@ -15,7 +16,11 @@ const ReportById = () => {
     reportDetailId: id,
   };
 
-  return <ReportDetail reportDetailId={ReportDetailId.reportDetailId} />;
+  return (
+    <ErrorBoundary fallback={<p>Could not load report details</p>}>
+      <ReportDetail reportDetailId={ReportDetailId.reportDetailId} />
+    </ErrorBoundary>
+  );
 };
 
 export default ReportById;

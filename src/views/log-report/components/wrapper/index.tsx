@@ -1,7 +1,8 @@
 import { ListDateItem, Title } from "@/components";
-import { UserNameInterface } from "@/context";
 import { useListReport } from "@/views/report-menu/hooks";
+import { ReportListResponseDataInterface } from "@/views/report-menu/type/listReport";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 interface UserProps {
   userId: string | undefined;
@@ -16,6 +17,15 @@ const LogReportWrapper = ({ userId, userName, errMessage }: UserProps) => {
     router.push("/list-operator");
   };
 
+  const [reportList, setReportLists] = useState<
+    ReportListResponseDataInterface[]
+  >([]);
+
+  useEffect(() => {
+    if (reports) {
+      setReportLists(reports.data);
+    }
+  }, [reports]);
   const selectReport = (reportId: string) => {
     router.push(`/reports/${reportId}`);
   };
@@ -31,8 +41,8 @@ const LogReportWrapper = ({ userId, userName, errMessage }: UserProps) => {
           <h1 className="font-bold text-xl">{userName}</h1>
         </div>
         <div className="">
-          {reports && errMessage === "" && !isLoading && !error ? (
-            reports.data.map((report, index) => (
+          {reportList && errMessage === "" && !isLoading && !error ? (
+            reportList.map((report, index) => (
               <div key={index}>
                 <ListDateItem
                   status={report.status}

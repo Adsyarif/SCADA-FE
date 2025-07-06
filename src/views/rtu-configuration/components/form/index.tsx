@@ -3,28 +3,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
 import { RtuFormData, rtuSchema } from "../../schema";
 import { Input, Title } from "@/components";
 import { useCreateRTU, useUpdateRtuConfiguration } from "../../api";
-
-const MapContainer = dynamic(
-  () => import("react-leaflet").then((mod) => mod.MapContainer),
-  { ssr: false }
-);
-const TileLayer = dynamic(
-  () => import("react-leaflet").then((mod) => mod.TileLayer),
-  { ssr: false }
-);
-const Marker = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Marker),
-  { ssr: false }
-);
-const Circle = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Circle),
-  { ssr: false }
-);
+import { MapContainer, TileLayer } from "react-leaflet";
 
 interface RtuFormProps {
   initialData?: RtuFormData & { id?: string };
@@ -72,7 +55,15 @@ export function RtuConfigurationForm({ initialData }: RtuFormProps) {
     const { lat, lng } = e.latlng;
     setValue("latitude", lat);
     setValue("longitude", lng);
-    setValue("radius", radius);
+  };
+
+  const handleCoordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const text = e.target.value;
+    const parts = text.split(",").map((s) => parseFloat(s.trim()));
+    if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+      setValue("latitude", parts[0]);
+      setValue("longitude", parts[1]);
+    }
   };
 
   
@@ -98,7 +89,7 @@ export function RtuConfigurationForm({ initialData }: RtuFormProps) {
           {...register("rtuEngineId")}
           className="border p-2 rounded w-full"
         />
-        
+        <p className="text-red-600">{errors.rtuEngineId?.message}</p>
       </div>
 
       <div style={{ height: 300 }}>

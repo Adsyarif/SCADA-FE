@@ -62,7 +62,7 @@ export default function LoginWrapper() {
   };
 
   return (
-    <div className="w-96 flex justify-center">
+    <div className="w-96 flex justify-center bg-white">
       <div className="w-full flex flex-col justify-center items-center gap-8">
         <img src="/img/Logo.png" alt="logo" className="w-32" />
         <h1 className="text-2xl">Sign In</h1>

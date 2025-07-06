@@ -10,6 +10,7 @@ import { RtuFormData, rtuSchema } from "../../schema";
 import { Input, Title } from "@/components";
 import { useCreateRTU, useUpdateRtuConfiguration } from "../../api";
 
+
 const MapContainer = dynamic(
   () => import("react-leaflet").then((mod) => mod.MapContainer),
   { ssr: false }

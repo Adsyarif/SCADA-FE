@@ -73,10 +73,20 @@ export function UserFormWrapper({ initialValues, onSubmit }: UserFormWrapperProp
     
     const values = methods.getValues()
     if (isEdit && onSubmit) {
-      onSubmit(values);
+      onSubmit(values as UserFormValues);
       router.push("/user");
     } else {
-      createMutation.mutate(values, {
+      const safeValues = {
+        ...values,
+        userRoleId: values.userRoleId ?? "",
+        employee_number: values.employee_number ?? "",
+        nik: values.nik ?? "",
+        username: values.username ?? "",
+        email: values.email ?? "",
+        password: values.password ?? "",
+        rtuAssignments: values.rtuAssignments ?? [],
+      };
+      createMutation.mutate(safeValues, {
         onSuccess: () => router.push("/user"),
       })
     }

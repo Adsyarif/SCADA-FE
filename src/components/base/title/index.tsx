@@ -15,9 +15,7 @@ const Title = ({ text, isButton, handleBackClick }: TitleProps) => {
       {isButton && (
         <div
           className="absolute left-5 top-1/2 -translate-y-1/2 -translate-x-1/12"
-          onClick={ handleBackClick= () => {
-            router.back();}
-          }
+          onClick={handleBackClick}
         >
           <LucideArrowLeft />
         </div>

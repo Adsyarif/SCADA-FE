@@ -5,7 +5,6 @@ export type TableColumn<T> = {
     accessor: keyof T
     cell?: (value: T[keyof T], row: T) => ReactNode
 }
-
 export type PaginationProps = {
   page: number;
   limit: number;

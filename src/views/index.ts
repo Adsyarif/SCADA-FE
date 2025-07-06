@@ -10,4 +10,4 @@ export * from "./user-role";
 export * from "./user-management";
 export * from "./rtu-configuration";
 export * from "./schedule-management";
-
+export * from "./report-detail";

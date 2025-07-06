@@ -13,6 +13,7 @@ interface ReportDetailResponseDataInterface {
   reportCategoryName: string;
   reportDescription: string;
   reportImage: string;
+  status?: string;
 }
 
 export interface ReportDetailInterface {

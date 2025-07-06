@@ -1,7 +1,8 @@
 import { Layout } from "@/components";
-import ReportMenu from "@/views/report-detail/components/wrapper";
 import { ReportDetailInterface } from "@/views/report-detail/type/reportDetail";
 import { useParams } from "next/navigation";
+import { ReportDetail } from "@/views";
+import ErrorBoundary from "@/views/report-detail/components/errorBoundary";
 
 const ReportById = () => {
   const param = useParams();
@@ -11,11 +12,15 @@ const ReportById = () => {
     return <p>No report found</p>;
   }
 
-  const ReportDetail: ReportDetailInterface = {
+  const ReportDetailId: ReportDetailInterface = {
     reportDetailId: id,
   };
 
-  return <ReportMenu reportDetailId={ReportDetail.reportDetailId} />;
+  return (
+    <ErrorBoundary fallback={<p>Could not load report details</p>}>
+      <ReportDetail reportDetailId={ReportDetailId.reportDetailId} />
+    </ErrorBoundary>
+  );
 };
 
 export default ReportById;

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Button, FullPageError, LoadingPage, MapComponent, Title } from '@/components';
+import { Button, FullPageError, LoadingPage, Title } from '@/components';
 import { useAttendanceInit,useToggleAttendance } from '../../api';
 import { CreateAttendanceRequest } from '../../types';
 import { getDistanceInMeters } from '@/lib/getDistanceInMeters';
+import MapComponent from '@/components/map';
 
 export function AttendanceWrapper() {
   const [coords, setCoords] = useState<{ latitude: number; longitude: number}>()

@@ -1,57 +1,35 @@
 import dynamic from 'next/dynamic'
 import type { LatLngExpression } from 'leaflet'
-import type { LeafletMouseEvent } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { CircleDot, MapPin } from 'lucide-react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { useMapEvent } from 'react-leaflet'
 
-// dynamically-loaded Leaflet components
-const MapContainer = dynamic(
-  () => import('react-leaflet').then(m => m.MapContainer),
-  { ssr: false }
-) as typeof import('react-leaflet')['MapContainer']
-
-const TileLayer = dynamic(
-  () => import('react-leaflet').then(m => m.TileLayer),
-  { ssr: false }
-) as typeof import('react-leaflet')['TileLayer']
-
-const LeafletMarker = dynamic(
-  () => import('react-leaflet').then(m => m.Marker),
-  { ssr: false }
-) as typeof import('react-leaflet')['Marker']
-
-const LeafletCircle = dynamic(
-  () => import('react-leaflet').then(m => m.Circle),
-  { ssr: false }
-) as typeof import('react-leaflet')['Circle']
-
-// helper to capture map clicks
-function MapClickHandler({
-  onClick,
-}: {
-  onClick: (e: LeafletMouseEvent) => void
-}) {
-  useMapEvent('click', onClick)
-  return null
-}
+const MapContainer = dynamic<{
+  center: LatLngExpression
+  zoom?: number
+  children: React.ReactNode
+  scrollWheelZoom?: boolean
+  style?: React.CSSProperties
+}>(() => import('react-leaflet').then((m) => m.MapContainer), { ssr: false })
+const TileLayer = dynamic(() => import('react-leaflet').then((m) => m.TileLayer), { ssr: false })
+const Marker   = dynamic(() => import('react-leaflet').then((m) => m.Marker),   { ssr: false })
+const Circle   = dynamic(() => import('react-leaflet').then((m) => m.Circle),   { ssr: false })
 
 interface MapComponentProps {
-  center: LatLngExpression
+  center:      LatLngExpression
   userPosition?: LatLngExpression
-  radius?: number
-  zoom?: number
+  radius?:     number
+  zoom?:       number
 }
 
-export function MapComponent({
+export default function MapComponent({
   center,
   userPosition,
   radius,
   zoom = 15,
 }: MapComponentProps) {
-  // build your DivIcons…
-  let rtuIcon: any, userIcon: any
+  let rtuIcon: any
+  let userIcon: any
   if (typeof window !== 'undefined') {
     const L = require('leaflet')
     rtuIcon = new L.DivIcon({
@@ -66,41 +44,33 @@ export function MapComponent({
     })
   }
 
-  const handleMapClick = (e: LeafletMouseEvent) => {
-    // e.latlng.lat / e.latlng.lng …
-  }
-
   return (
     <MapContainer
       center={center}
       zoom={zoom}
       scrollWheelZoom={false}
-      className="w-full h-full"
       style={{ height: '100%', width: '100%' }}
     >
       <TileLayer
-        attribution='&copy; OpenStreetMap contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       />
 
-      {/* catch clicks */}
-      <MapClickHandler onClick={handleMapClick} />
+      {/* RTU marker */}
+      {rtuIcon && <Marker position={center} icon={rtuIcon} />}
 
-      {/* RTU pin */}
-      {rtuIcon && <LeafletMarker position={center} icon={rtuIcon} />}
-
-      {/* radius */}
-      {radius != null && (
-        <LeafletCircle
+      {/* Geofence circle */}
+      {radius && (
+        <Circle
           center={center}
           radius={radius}
           pathOptions={{ fillOpacity: 0.1, color: 'blue' }}
         />
       )}
 
-      {/* user pin */}
+      {/* User marker */}
       {userPosition && userIcon && (
-        <LeafletMarker position={userPosition} icon={userIcon} />
+        <Marker position={userPosition} icon={userIcon} />
       )}
     </MapContainer>
   )

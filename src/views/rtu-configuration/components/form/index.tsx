@@ -1,32 +1,13 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
 import { RtuFormData, rtuSchema } from "../../schema";
 import { Input, Title } from "@/components";
 import { useCreateRTU, useUpdateRtuConfiguration } from "../../api";
-
-
-const MapContainer = dynamic(
-  () => import("react-leaflet").then((mod) => mod.MapContainer),
-  { ssr: false }
-);
-const TileLayer = dynamic(
-  () => import("react-leaflet").then((mod) => mod.TileLayer),
-  { ssr: false }
-);
-const Marker = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Marker),
-  { ssr: false }
-);
-const Circle = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Circle),
-  { ssr: false }
-);
+import MapComponent from "@/components/map";
 
 interface RtuFormProps {
   initialData?: RtuFormData & { id?: string };
@@ -42,6 +23,7 @@ export function RtuConfigurationForm({ initialData }: RtuFormProps) {
     handleSubmit,
     setValue,
     watch,
+    control,
     formState: { errors },
   } = useForm<RtuFormData>({
     resolver: zodResolver(rtuSchema),
@@ -103,33 +85,43 @@ export function RtuConfigurationForm({ initialData }: RtuFormProps) {
       </div>
 
       <div style={{ height: 300 }}>
-         <MapContainer 
-              style={{ height: "100%", width: "100%" }}
-              center={[51.505, -0.09]} zoom={32} scrollWheelZoom={false}
-              >
-              <TileLayer 
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-          </MapContainer>
+         <MapComponent
+            center={{ lat: latitude, lng: longitude }}
+            radius={radius}
+            zoom={15}
+         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div>
         <div>
-          <Input
-            label="Latitude"
-            type="number"
-            step="any"
-            {...register("latitude", { valueAsNumber: true })}
-            className="border p-2 rounded w-full"
-          />
-        </div>
-        <div>
-          <Input
-            label="Longitude"
-            step="any"
-            {...register("longitude", { valueAsNumber: true })}
-            className="border p-2 rounded w-full"
+         <Controller
+            name="combined"
+            control={control}
+            render={({ field }) => {
+              const display = `${latitude.toFixed(6)},${longitude.toFixed(6)}`
+
+              const { value, ...fieldProps } = field;
+
+              return (
+                <Input
+                  label="Latitude/Longitude"
+                  type="text"
+                  value={display}
+                  {...fieldProps}
+                  onChange={(e) => {
+                    const [latStr = "", lngStr = ""] = e.target.value.split(",")
+                    const lat = parseFloat(latStr.trim())
+                    const lng = parseFloat(lngStr.trim())
+
+                    field.onChange(e.target.value)
+
+                    if (!isNaN(lat)) setValue("latitude", lat, { shouldValidate: true })
+                    if (!isNaN(lng)) setValue("longitude", lng, { shouldValidate: true })
+                  }}
+                  className="border p-2 rounded w-full"
+                />
+              )
+            }}
           />
         </div>
       </div>

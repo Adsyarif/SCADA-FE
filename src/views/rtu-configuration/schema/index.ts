@@ -7,6 +7,6 @@ export const rtuSchema = z.object({
   latitude:  z.number(),
   longitude: z.number(),
   radius:    z.number().positive("Radius must be positive"),
-});
+}).extend({ combined: z.string().optional()});
 
 export type RtuFormData = z.infer<typeof rtuSchema>;

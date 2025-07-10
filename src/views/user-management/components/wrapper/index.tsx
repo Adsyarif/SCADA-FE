@@ -50,7 +50,7 @@ export default function UserManagementWrapper() {
   return (
     <div className="p-4 space-y-4 w-full">
       <div className="flex items-center justify-between">
-        <Title isButton text="User Management" />
+        <Title isButton backHref="/homepage" text="User Management" />
       </div>
 
         <div className="flex items-center gap-4 mb-4">

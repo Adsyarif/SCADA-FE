@@ -5,17 +5,24 @@ interface TitleProps {
   text: string;
   isButton?: boolean;
   handleBackClick?: () => void;
+  backHref?: string;
 }
 
-const Title = ({ text, isButton, handleBackClick }: TitleProps) => {
+const Title = ({ text, isButton, handleBackClick, backHref }: TitleProps) => {
   const router = useRouter();
+  
+  const onBack = handleBackClick
+    ? handleBackClick
+    : backHref
+    ? () => router.push(backHref)
+    : () => router.back();
 
   return (
     <div className="flex px-5 relative h-[65px] w-full">
       {isButton && (
         <div
           className="absolute left-5 top-1/2 -translate-y-1/2 -translate-x-1/12"
-          onClick={handleBackClick}
+          onClick={onBack}
         >
           <LucideArrowLeft />
         </div>

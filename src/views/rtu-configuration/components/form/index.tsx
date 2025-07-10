@@ -61,7 +61,7 @@ export function RtuConfigurationForm({ initialData }: RtuFormProps) {
   
   return (
    <div className="w-full">
-    <Title isButton text={isEdit ? "Edit RTU" : "Create RTU"} />
+    <Title isButton backHref="/rtu-configuration" text={isEdit ? "Edit RTU" : "Create RTU"} />
      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-4">
       <div className="space-y-2">
         <Input

@@ -40,7 +40,7 @@ export function UserRoleWrapper() {
  
     return (
         <div className="flex flex-col grow">
-        <Title isButton text="User Roles" />
+        <Title isButton backHref="/homepage" text="User Roles" />
   
         <div className="px-4">
           <div className="flex justify-end items-center mb-4">

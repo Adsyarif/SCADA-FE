@@ -96,7 +96,7 @@ export function UserFormWrapper({ initialValues, onSubmit }: UserFormWrapperProp
 
   return (
     <div className="p-4 w-full">
-      <Title isButton text={isEdit ? "Edit User" : "Create User"} />
+      <Title isButton backHref="/user" text={isEdit ? "Edit User" : "Create User"} />
       <FormProvider {...methods}>
         {step === 1 && <StepOne roles={roles || []} />}
         {step === 2 && <StepTwo rtus={rtus || []} />}

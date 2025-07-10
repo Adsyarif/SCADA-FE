@@ -111,7 +111,7 @@ export function AttendanceWrapper() {
     <div className="flex flex-col w-full h-full">
       {/* Top pane */}
       <div className="flex-1 flex flex-col items-center justify-center gap-4 p-4">
-        <Title isButton text="Absensi" />
+        <Title isButton backHref='/homepage' text="Absensi" />
         <div className='flex gap-4 text-sm text-gray-600'>
            <span>
               Date: {todayStr}

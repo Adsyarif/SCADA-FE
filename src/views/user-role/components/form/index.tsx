@@ -78,6 +78,7 @@ export function UserRoleForm({ initialData }: Props) {
     <div className="w-full p-4">
       <Title
         isButton
+        backHref='/user-role'
         text={isEdit ? 'Edit User Role' : 'Create User Role'}
       />
 

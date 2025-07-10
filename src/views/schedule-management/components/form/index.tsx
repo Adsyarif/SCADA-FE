@@ -78,7 +78,7 @@ export function ScheduleForm({ defId }: Props) {
 
   return (
     <div className="w-full p-4 space-y-6">
-      <Title isButton text={isEdit ? 'Edit Schedule' : 'Create Schedule'} />
+      <Title isButton backHref='/schedule-management' text={isEdit ? 'Edit Schedule' : 'Create Schedule'} />
 
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

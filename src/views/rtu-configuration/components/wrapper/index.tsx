@@ -84,7 +84,7 @@ export function RtuConfigurationWrapper() {
   return (
     <div className="w-full">
       <div>
-        <Title isButton text="RTU Configuration" />
+        <Title isButton backHref="/homepage" text="RTU Configuration" />
         <div className="px-4">
           <div className="flex justify-end items-center mb-4">
             <button

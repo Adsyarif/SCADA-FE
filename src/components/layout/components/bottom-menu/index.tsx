@@ -1,13 +1,14 @@
-import { Bell, HouseIcon, Mail, User } from "lucide-react";
+import { Bell, HouseIcon, Mail, SquareArrowRightIcon, User } from "lucide-react";
 import Link from "next/link";
 
 export function BottomMenu() {
     return (
-        <div className="flex justify-center space-between">
-            <Link href="/"><HouseIcon /></Link>
-            <Link href="/"><Mail /></Link>
-            <Link href="/"><Bell/></Link>
-            <Link href="/"><User /></Link>
+        <div className="flex justify-around gap-4 p-4 opacity-80 bg-white">
+            <Link href="/homepage"><HouseIcon /></Link>
+            <Link href="/message"><Mail /></Link>
+            <Link href="/notification"><Bell/></Link>
+            <Link href="/user-profile"><User /></Link>
+            <Link href="/"><SquareArrowRightIcon /></Link>
         </div>
     )
 }

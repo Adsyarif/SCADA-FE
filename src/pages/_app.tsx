@@ -1,6 +1,32 @@
+import { ReactElement, ReactNode, useState } from "react";
+import { AppProps } from "next/app";
 import "@/styles/globals.css";
-import type { AppProps } from "next/app";
+import { SessionProvider } from "next-auth/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AppProvider } from "@/context";
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+type NextPageWithLayout = {
+  getLayout?: (page: ReactElement) => ReactNode;
+  requiredPermission: string;
+} & AppProps["Component"];
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+export default function MyApp({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page) => page);
+  const [queryClient] = useState(() => new QueryClient());
+  return getLayout(
+    <SessionProvider session={session}>
+      <QueryClientProvider client={queryClient}>
+        <AppProvider>
+          <Component {...pageProps} />
+        </AppProvider>
+      </QueryClientProvider>
+    </SessionProvider>
+  );
 }

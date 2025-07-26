@@ -14,14 +14,19 @@ export default NextAuth({
       },
       async authorize(credentials) {
         try {
-          const loginRes = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-            {
-              email: credentials?.email,
-              password: credentials?.password,
-            }
-          );
+          const url = `${process.env.NEXT_PUBLIC_API_URL}/auth/login`;
+          const data = {
+            email: credentials?.email,
+            password: credentials?.password,
+          }
+
+          console.log('Sending login request to:', url);
+          console.log('Request payload:', data);
+
+          const loginRes = await axios.post(url, data);
+          console.log('✅ Response from backend:', loginRes.data);
           const token = loginRes.data.access_token;
+
           if (!token) {
             return null;
           }

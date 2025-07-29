@@ -3,23 +3,34 @@ import type { LatLngExpression } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { CircleDot, MapPin } from 'lucide-react'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { MapContainerProps } from 'react-leaflet'
 
-const MapContainer = dynamic<{
-  center: LatLngExpression
-  zoom?: number
-  children: React.ReactNode
-  scrollWheelZoom?: boolean
-  style?: React.CSSProperties
-}>(() => import('react-leaflet').then((m) => m.MapContainer), { ssr: false })
-const TileLayer = dynamic(() => import('react-leaflet').then((m) => m.TileLayer), { ssr: false })
-const Marker   = dynamic(() => import('react-leaflet').then((m) => m.Marker),   { ssr: false })
-const Circle   = dynamic(() => import('react-leaflet').then((m) => m.Circle),   { ssr: false })
+// Solution: Type assertion workaround
+const MapContainer = dynamic(
+  () => import('react-leaflet').then((mod) => mod.MapContainer as React.ComponentType<MapContainerProps>),
+  { ssr: false }
+)
+
+const TileLayer = dynamic(
+  () => import('react-leaflet').then((mod) => mod.TileLayer),
+  { ssr: false }
+)
+
+const Marker = dynamic(
+  () => import('react-leaflet').then((mod) => mod.Marker),
+  { ssr: false }
+)
+
+const Circle = dynamic(
+  () => import('react-leaflet').then((mod) => mod.Circle),
+  { ssr: false }
+)
 
 interface MapComponentProps {
-  center:      LatLngExpression
+  center: LatLngExpression
   userPosition?: LatLngExpression
-  radius?:     number
-  zoom?:       number
+  radius?: number
+  zoom?: number
 }
 
 export default function MapComponent({
@@ -30,6 +41,7 @@ export default function MapComponent({
 }: MapComponentProps) {
   let rtuIcon: any
   let userIcon: any
+  
   if (typeof window !== 'undefined') {
     const L = require('leaflet')
     rtuIcon = new L.DivIcon({
@@ -56,10 +68,7 @@ export default function MapComponent({
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       />
 
-      {/* RTU marker */}
       {rtuIcon && <Marker position={center} icon={rtuIcon} />}
-
-      {/* Geofence circle */}
       {radius && (
         <Circle
           center={center}
@@ -67,8 +76,6 @@ export default function MapComponent({
           pathOptions={{ fillOpacity: 0.1, color: 'blue' }}
         />
       )}
-
-      {/* User marker */}
       {userPosition && userIcon && (
         <Marker position={userPosition} icon={userIcon} />
       )}

@@ -10,6 +10,8 @@ import { CreateReportInterfaceRequest } from "../../types/report";
 import FileInput from "../FileInput";
 import CategorySelect from "../CategorySelect";
 import ReportTextarea from "../ReportTextArea";
+import ReportSucces from "@/pages/reports/report-case/success";
+import ReportError from "@/pages/reports/report-case/error";
 
 const ReportCase = () => {
   const [selectedValue, setSelectedValue] = useState("");
@@ -82,11 +84,15 @@ const ReportCase = () => {
     mutate(payload, {
       onSuccess: () => {
         setIsLoading(false);
-        router.push("/report-case/success");
+        return(
+          <ReportSucces />
+        );
       },
       onError: () => {
         setIsLoading(false);
-        router.push("/report-case/error");
+        return(
+          <ReportError />
+        )
       },
     });
   };

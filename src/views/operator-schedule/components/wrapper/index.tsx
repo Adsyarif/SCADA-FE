@@ -1,5 +1,10 @@
 import { Title } from "@/components";
-import { CalendarSchedule } from "@/views";
+import dynamic from "next/dynamic";
+
+const CalendarSchedule = dynamic(
+  () => import("@/views").then((mod) => mod.CalendarSchedule),
+  { ssr: false }
+);
 
 export function OperatorScheduleWrapper() {
   return (
@@ -7,6 +12,7 @@ export function OperatorScheduleWrapper() {
       <Title isButton backHref="/homepage" text="Calendar" />
       <div>
         <CalendarSchedule shiftId={""} />
+      </div>
     </div>
   );
 }

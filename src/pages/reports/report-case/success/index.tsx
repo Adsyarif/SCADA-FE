@@ -1,8 +1,13 @@
-import ResultResponse from "@/components/resultResponse";
+import dynamic from "next/dynamic";
 
-const ReportSucces = () => {
+const DynamicResultResponse = dynamic(
+  () => import("@/components/resultResponse"),
+  { ssr: false }
+);
+
+const ReportSuccess = () => {
   return (
-    <ResultResponse
+    <DynamicResultResponse
       isSuccess={true}
       title={"Berhasil mengirim laporan!"}
       description={"Laporan kamu telah berhasil dikirimkan."}
@@ -12,4 +17,4 @@ const ReportSucces = () => {
   );
 };
 
-export default ReportSucces;
+export default ReportSuccess;

@@ -1,16 +1,12 @@
 import dynamic from 'next/dynamic'
-import type { LatLngExpression } from 'leaflet'
+import type { LatLngExpression, DivIcon } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { CircleDot, MapPin } from 'lucide-react'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { useEffect, useState } from 'react'
+import { type MapContainerProps } from 'react-leaflet' 
 
-const MapContainer = dynamic<{
-  center: LatLngExpression
-  zoom?: number
-  children: React.ReactNode
-  scrollWheelZoom?: boolean
-  style?: React.CSSProperties
-}>(() => import('react-leaflet').then((m) => m.MapContainer), { ssr: false })
+const MapContainer = dynamic<MapContainerProps>(() => import('react-leaflet').then((m) => m.MapContainer), { ssr: false })
 const TileLayer = dynamic(() => import('react-leaflet').then((m) => m.TileLayer), { ssr: false })
 const Marker   = dynamic(() => import('react-leaflet').then((m) => m.Marker),   { ssr: false })
 const Circle   = dynamic(() => import('react-leaflet').then((m) => m.Circle),   { ssr: false })
@@ -28,21 +24,23 @@ export default function MapComponent({
   radius,
   zoom = 15,
 }: MapComponentProps) {
-  let rtuIcon: any
-  let userIcon: any
-  if (typeof window !== 'undefined') {
+  const [rtuIcon, setRtuIcon] = useState<DivIcon>()
+  const [userIcon, setUserIcon] = useState<DivIcon>()
+
+  useEffect(() => {
+    // Dynamically import leaflet only on the client-side
     const L = require('leaflet')
-    rtuIcon = new L.DivIcon({
+    setRtuIcon(new L.DivIcon({
       html: renderToStaticMarkup(<MapPin color="red" size={32} />),
       className: '',
       iconAnchor: [16, 32],
-    })
-    userIcon = new L.DivIcon({
+    }))
+    setUserIcon(new L.DivIcon({
       html: renderToStaticMarkup(<CircleDot color="blue" size={24} />),
       className: '',
       iconAnchor: [12, 24],
-    })
-  }
+    }))
+  }, [])
 
   return (
     <MapContainer

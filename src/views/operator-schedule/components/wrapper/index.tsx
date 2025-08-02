@@ -7,7 +7,6 @@ export function OperatorScheduleWrapper() {
       <Title isButton backHref="/homepage" text="Calendar" />
       <div>
         <CalendarSchedule shiftId={""} />
-      </div>
     </div>
   );
 }

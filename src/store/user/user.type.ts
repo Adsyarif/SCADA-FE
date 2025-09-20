@@ -1,9 +1,9 @@
 export interface ICurrentUserProps {
   name: string;
   role: string;
-  token: string;
 }
 
 export interface IUser {
+  token: string | null;
   currentUser: ICurrentUserProps | null;
 }

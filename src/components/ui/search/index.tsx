@@ -1,4 +1,4 @@
-import ContactItem from "../contactItem/";
+import ContactItem from "../contactItem";
 import { LucideLoader, LucideSearch } from "lucide-react";
 import { useState } from "react";
 

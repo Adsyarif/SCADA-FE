@@ -1,4 +1,4 @@
-export * from "./base";
+export * from "./ui";
 export * from "./layout";
 export * from "./indicator-rtu";
 export * from "./menu-items";
@@ -11,4 +11,3 @@ export * from "./shift-list";
 export * from "./map";
 export * from "./page-error";
 export { default as RevisionSection } from "./revisionSection";
-

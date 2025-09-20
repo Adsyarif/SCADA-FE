@@ -1,6 +1,6 @@
-export * from "./button";
+export { default as Button } from "./button";
+export { default as Input } from "./input";
 export * from "./card";
-export * from "./input";
 export * from "./dropdown";
 export { default as Title } from "./title";
 export { default as Search } from "./search";

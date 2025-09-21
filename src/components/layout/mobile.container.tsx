@@ -12,7 +12,9 @@ const MobileContainer = ({
   padding = true,
 }: MobileContainerProps) => {
   return (
-    <div className={`${padding ? "p-4" : ""} ${className}`}>{children}</div>
+    <div className={`w-full max-w-[100vw] overflow-x-hidden ${className}`}>
+      {children}
+    </div>
   );
 };
 

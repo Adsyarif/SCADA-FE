@@ -10,4 +10,5 @@ export * from "./loading-page";
 export * from "./shift-list";
 export * from "./map";
 export * from "./page-error";
+export * from "./sections";
 export { default as RevisionSection } from "./revisionSection";

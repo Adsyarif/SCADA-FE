@@ -19,7 +19,7 @@ const SplashScreen = ({ onFinish, duration = 2500 }: SplashScreenProps) => {
 
   return (
     <div
-      className={`fixed inset-0 flex items-center justify-center bg-blue-600 z-50 transition-opacity duration-500 ${
+      className={`fixed inset-0 flex items-center justify-center bg-blue-600 z-150 transition-opacity duration-500 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
@@ -30,10 +30,7 @@ const SplashScreen = ({ onFinish, duration = 2500 }: SplashScreenProps) => {
         <h1 className="text-4xl font-bold mb-2">SCADA ONLINE</h1>
         <p className="text-xl opacity-80">Monitoring System</p>
         <div className="mt-8 w-32 h-1 bg-white bg-opacity-30 rounded-full mx-auto overflow-hidden">
-          <div
-            className="h-full bg-white rounded-full transition-all duration-2000 ease-out"
-            style={{ width: isVisible ? "100%" : "0%" }}
-          ></div>
+          <div className="h-full bg-blue-300 rounded-full progress-animation"></div>
         </div>
       </div>
     </div>

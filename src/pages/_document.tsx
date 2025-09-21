@@ -6,7 +6,10 @@ export default function Document() {
       <Head>
         <title>Scada Online</title>
         <meta name="description" content="Aplikasi SCADA Monitoring System" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
         <link rel="icon" href="favicon.ico" type="image/x-icon" />
 
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
@@ -34,7 +37,7 @@ export default function Document() {
           crossOrigin=""
         />
       </Head>
-      <body className="antialiased flex h-screen w-full justify-center bg-gray-200">
+      <body className="antialiased">
         <Main />
         <NextScript />
       </body>

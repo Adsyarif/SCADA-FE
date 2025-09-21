@@ -3,12 +3,13 @@ import logger from "redux-logger";
 import { rootReducer } from "./root-reducer";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { userApi } from "./api";
 import { useDispatch, useSelector } from "react-redux";
+import { authApi, userApi } from ".";
 
 const middlewares = [
   process.env.NODE_ENV === "development" && logger,
   userApi.middleware,
+  authApi.middleware,
 ].filter(Boolean) as Middleware[];
 
 const persistConfig = {

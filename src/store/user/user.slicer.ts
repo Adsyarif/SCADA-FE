@@ -1,5 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ICurrentUserProps, IUser } from "./user.type";
+export interface ICurrentUserProps {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  permissions: string[];
+}
+
+export interface IUser {
+  token: string | null;
+  currentUser: ICurrentUserProps | null;
+}
 
 const INITIAL_STATE: IUser = {
   currentUser: null,

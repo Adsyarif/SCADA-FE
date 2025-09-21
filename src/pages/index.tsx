@@ -1,6 +1,4 @@
 import { useEffect } from "react";
-import { useRouter } from "next/router";
-import SplashScreen from "@/components/sections/splashPage/splash.screen";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import {
   setVisit,
@@ -8,14 +6,19 @@ import {
   setSplashStateState,
   splashStateSelector,
 } from "@/store";
-import OnboardingCarousel from "@/components/carousel/carousel.onboarding";
+import { SplashScreen, OnboardingCarousel } from "@/components";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
-export default function HomePage() {
-  const dispatch = useAppDispatch();
+const InitialPage = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const currentSplashState = useAppSelector(splashStateSelector);
   const isVisit = useAppSelector(visitStateSelector);
-  console.log("splashState", currentSplashState);
+
+  const { data: session } = useSession();
+
+  const userName = session?.user.name;
 
   useEffect(() => {
     const visited = localStorage.getItem("hasVisited");
@@ -25,8 +28,10 @@ export default function HomePage() {
   const handleSplashFinish = () => {
     if (isVisit) {
       dispatch(setSplashStateState("onboarding"));
-    } else {
-      router.push("/login");
+    }
+
+    if (userName) {
+      router.push("/home");
     }
   };
 
@@ -47,4 +52,6 @@ export default function HomePage() {
       )}
     </>
   );
-}
+};
+
+export default InitialPage;

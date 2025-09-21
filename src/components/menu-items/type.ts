@@ -1,7 +1,8 @@
-import React from "react"
+import React from "react";
 
 export type MenuItemsProps = {
-    href: string
-    children: React.ReactNode
-    menuName: string
-}
+  href: string;
+  children: React.ReactNode;
+  menuName: string;
+  className: string;
+};

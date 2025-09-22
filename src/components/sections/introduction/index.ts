@@ -1,2 +1,2 @@
-export { default as OnboardingCarousel } from "./carousel/carousel.onboarding";
-export { default as SplashScreen } from "./splash/splash.screen";
+export { default as OnboardingCarousel } from "./carousel/onBoardingCarousel.component";
+export { default as SplashScreen } from "./splash/splashScreen.component";

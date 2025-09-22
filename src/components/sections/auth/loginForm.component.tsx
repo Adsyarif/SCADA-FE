@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Eye, EyeClosed, Info, LockKeyhole, Mail } from "lucide-react";
 import { Input, Button } from "@/components";
 import { useLogin } from "@/hooks/auth/useLogin";
-import { LoginHeader } from "./login.header";
+import { LoginHeader } from "./loginHeader.component";
 
 export const LoginForm: React.FC = () => {
   const {

@@ -11,4 +11,5 @@ export * from "./shift-list";
 export * from "./map";
 export * from "./page-error";
 export * from "./sections";
+export * from "./skeleton";
 export { default as RevisionSection } from "./revisionSection";

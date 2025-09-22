@@ -86,7 +86,6 @@ const OnboardingCarousel = ({ onComplete }: OnboardingCarouselProps) => {
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-blue-50 to-indigo-100 z-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md h-[520px] flex flex-col bg-white rounded-xl shadow-lg p-6">
-        {/* Konten slide */}
         <div className="flex-1 flex flex-col items-center justify-center text-center mb-4">
           <div className="mb-6 h-20 flex items-center justify-center">
             {slides[currentSlide].icon}
@@ -102,7 +101,6 @@ const OnboardingCarousel = ({ onComplete }: OnboardingCarouselProps) => {
           </div>
         </div>
 
-        {/* Indicators */}
         <div className="flex justify-center space-x-2 mb-6 h-3">
           {slides.map((_, index) => (
             <button
@@ -116,7 +114,6 @@ const OnboardingCarousel = ({ onComplete }: OnboardingCarouselProps) => {
           ))}
         </div>
 
-        {/* Terms checkbox hanya di slide terakhir */}
         {currentSlide === slides.length - 1 && (
           <div className="mb-6 h-12 flex items-center justify-center">
             <label className="flex items-center cursor-pointer">
@@ -133,7 +130,6 @@ const OnboardingCarousel = ({ onComplete }: OnboardingCarouselProps) => {
           </div>
         )}
 
-        {/* Navigation buttons */}
         <div className="flex justify-between items-center h-12">
           <button
             onClick={handlePrevSlide}

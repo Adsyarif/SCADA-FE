@@ -11,7 +11,6 @@ import {
   Menu,
   X,
   BarChart3,
-  History,
   Calendar,
   CalendarCheck,
   Laptop,

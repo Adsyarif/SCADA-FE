@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { FullscreenLoading, MobileLayout } from "@/components";
 import { useLogin } from "@/hooks/auth/useLogin";
-import { LoginForm } from "@/components/sections/auth/login.form";
+import { LoginForm } from "@/components/sections/auth/loginForm.component";
 
 const LoginPage = () => {
   const { status } = useSession();

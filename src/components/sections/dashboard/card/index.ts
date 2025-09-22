@@ -1,4 +1,4 @@
-export { default as QuickAccess } from "./dashboard.card.quickAccess";
-export { default as SystemCards } from "./dashboard.card.system";
-export { default as SystemHealth } from "./dashboard.card.systemHeatlh";
-export { default as TemperatureMonitoring } from "./dashboard.card.tempMonitor";
+export { default as QuickAccess } from "./quickAccess.card.component";
+export { default as SystemCards } from "./system.card.component";
+export { default as SystemHealth } from "./systemHeatlh.card.component";
+export { default as TemperatureMonitoring } from "./temperatureMonitoring.card.component";

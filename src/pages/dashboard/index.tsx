@@ -1,25 +1,7 @@
 import { useSession } from "next-auth/react";
 import MobileLayout from "@/components/layout/mobile.layout";
 import MobileContainer from "@/components/layout/mobile.container";
-import {
-  CalendarCheck,
-  Settings,
-  File,
-  Wifi,
-  Gauge,
-  MapPin,
-  Cpu,
-  Database,
-  Thermometer,
-  Zap,
-  Clock,
-  BarChart3,
-  ChevronRight,
-  User,
-  Battery,
-  Activity,
-  RefreshCw,
-} from "lucide-react";
+import { Activity } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
@@ -34,7 +16,6 @@ import {
 const Dashboard = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const userName = session?.user?.name;
   const [currentTime, setCurrentTime] = useState("");
   const [refreshing, setRefreshing] = useState(false);
 
@@ -75,48 +56,19 @@ const Dashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // PERBAIKAN: Hanya tampilkan loading saat checking auth
   if (status === "loading") {
     return <FullscreenLoading text="Checking authentication..." />;
   }
 
-  // PERBAIKAN: Redirect jika tidak ada session
   if (!session) {
     return <FullscreenLoading text="Redirecting to login..." />;
   }
-
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Selamat Pagi";
-    if (hour < 15) return "Selamat Siang";
-    if (hour < 19) return "Selamat Sore";
-    return "Selamat Malam";
-  };
-
-  const getStatusColor = () => {
-    switch (systemData.status) {
-      case "normal":
-        return "bg-green-500";
-      case "warning":
-        return "bg-yellow-500";
-      case "danger":
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
 
   const handleRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
     }, 1500);
-  };
-
-  const getPressureColor = (pressure: number) => {
-    if (pressure > 90) return "bg-red-500";
-    if (pressure > 70) return "bg-yellow-500";
-    return "bg-green-500";
   };
 
   return (

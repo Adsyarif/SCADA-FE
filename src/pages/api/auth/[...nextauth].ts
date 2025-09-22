@@ -1,16 +1,16 @@
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import axios from 'axios';
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 export default NextAuth({
   debug: true,
   providers: [
     CredentialsProvider({
-      name: 'Email & Password',
+      name: "Email & Password",
       credentials: {
-        email: { label: 'Email', type: 'text' },
-        password: { label: 'Password', type: 'password' },
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         try {
@@ -25,10 +25,9 @@ export default NextAuth({
           if (!token) {
             return null;
           }
-         
-          const decodedToken = jwtDecode(token)
-          const userId = decodedToken.sub as string; 
-          console.log(`Decoded token:`, decodedToken);
+
+          const decodedToken = jwtDecode(token);
+          const userId = decodedToken.sub as string;
 
           return {
             accessToken: token,
@@ -37,7 +36,7 @@ export default NextAuth({
             name: decodedToken.username,
             role: decodedToken.role,
             permissions: decodedToken.permissions,
-          }
+          };
         } catch (error: any) {
           return null;
         }
@@ -45,7 +44,7 @@ export default NextAuth({
     }),
   ],
 
-  session: { strategy: 'jwt' },
+  session: { strategy: "jwt" },
 
   callbacks: {
     async jwt({ token, user }) {

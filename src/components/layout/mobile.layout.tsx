@@ -23,7 +23,7 @@ import {
   Wallet,
   File,
 } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 interface MobileLayoutProps {
   children: ReactNode;
@@ -183,9 +183,13 @@ const MobileLayout = ({
     { id: "profile", href: "/profile", icon: User, label: "Profil" },
   ];
 
-  const handleLogout = () => {
-    console.log("Logging out...");
-    router.push("/login");
+  const handleLogout = async () => {
+    try {
+      await signOut({ redirect: false });
+      router.push("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   const handleNotificationClick = () => {
@@ -198,7 +202,6 @@ const MobileLayout = ({
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 relative w-full max-w-[100vw] overflow-x-hidden">
-      {/* HEADER - FIXED */}
       {showHeader && (
         <header
           className={`fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200/60 transition-all duration-300 ${
@@ -262,7 +265,6 @@ const MobileLayout = ({
         </header>
       )}
 
-      {/* MAIN CONTENT - dengan padding untuk header fixed */}
       <main
         className={`flex-grow overflow-y-auto w-full ${
           showHeader ? "pt-16" : ""
@@ -271,7 +273,6 @@ const MobileLayout = ({
         {children}
       </main>
 
-      {/* SIDEBAR */}
       {isSidebarOpen && (
         <div className="fixed inset-0 z-50">
           <div
@@ -316,7 +317,7 @@ const MobileLayout = ({
                     <Link
                       key={idx}
                       href={item.href}
-                      className={`flex items-center gap-3 p-3 rounded-lg transition-colors w-full text-left ${
+                      className={`flex items-center gap-3 py-3 rounded-lg transition-colors w-full text-left ${
                         isActive
                           ? "bg-blue-100 text-blue-700 border border-blue-200"
                           : "text-gray-600 hover:bg-gray-100"
@@ -344,7 +345,6 @@ const MobileLayout = ({
         </div>
       )}
 
-      {/* FOOTER */}
       {showFooter && (
         <footer className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200/60 shadow-lg z-20">
           <div className="w-full">

@@ -1,16 +1,16 @@
+// pages/login.tsx
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/router";
-import { Input, Button } from "@/components";
-import MobileLayout from "@/components/layout/mobile.layout";
+import { Input, Button, FullscreenLoading, MobileLayout } from "@/components";
 import { useEffect, useState } from "react";
 import { Eye, EyeClosed, Info, Loader, LockKeyhole, Mail } from "lucide-react";
 import { useLoginMutation } from "@/store";
 import { clearError, setError, setRememberMe } from "@/store/auth/auth.slicer";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -22,7 +22,6 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const LoginPage = () => {
   const { data: session, status } = useSession();
-  const currentuser = session?.user;
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
@@ -31,7 +30,6 @@ const LoginPage = () => {
   const { error: authError, rememberMe } = useAppSelector(
     (state) => state.auth
   );
-  const [login, { isLoading: isLoggingIn }] = useLoginMutation();
 
   const {
     register,
@@ -43,19 +41,22 @@ const LoginPage = () => {
   });
 
   useEffect(() => {
-    if (status === "authenticated" && currentuser) {
-      router.replace("/home");
+    // Jika sudah authenticated, redirect ke dashboard
+    if (status === "authenticated") {
+      const callbackUrl = router.query.callbackUrl as string;
+      router.replace(callbackUrl || "/dashboard");
     } else if (status === "unauthenticated") {
       setIsCheckingAuth(false);
     }
-  }, [status, currentuser, router]);
+  }, [status, router]);
 
   useEffect(() => {
+    // Timeout untuk mencegah stuck loading terlalu lama
     const timer = setTimeout(() => {
       if (status === "loading") {
         setIsCheckingAuth(false);
       }
-    }, 2000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [status]);
@@ -64,14 +65,28 @@ const LoginPage = () => {
     dispatch(clearError());
 
     try {
-      const result = await login(data).unwrap();
-      if (result.ok) {
-        const dest = (router.query.callbackUrl as string) || "/home";
+      console.log("Attempting NextAuth signIn...");
+
+      const result = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+        callbackUrl: "/dashboard",
+      });
+
+      console.log("SignIn result:", result);
+
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+
+      if (result?.ok) {
+        const dest = (router.query.callbackUrl as string) || "/dashboard";
         router.push(dest);
       }
     } catch (error: any) {
-      const errorMessage =
-        error?.error || error?.data?.message || "Login failed";
+      console.error("Login error:", error);
+      const errorMessage = error?.message || "Login failed. Please try again.";
       dispatch(setError(errorMessage));
       setFormError("password", { type: "manual", message: errorMessage });
     }
@@ -81,21 +96,12 @@ const LoginPage = () => {
     dispatch(setRememberMe(checked));
   };
 
-  const FullscreenLoading = ({ text }: { text: string }) => (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="flex flex-col items-center">
-        <Loader className="mb-4 h-8 w-8 animate-spin text-blue-600" />
-        <p className="text-gray-600">{text}</p>
-      </div>
-    </div>
-  );
-
   if (isCheckingAuth || status === "loading") {
     return <FullscreenLoading text="Checking authentication..." />;
   }
 
-  if (status === "authenticated" && currentuser) {
-    return <FullscreenLoading text="Redirecting to home..." />;
+  if (status === "authenticated") {
+    return <FullscreenLoading text="Redirecting to dashboard..." />;
   }
 
   return (
@@ -209,17 +215,9 @@ const LoginPage = () => {
 
               <Button
                 type="submit"
-                disabled={isLoggingIn}
                 className="w-full justify-center rounded-md border border-transparent bg-blue-600 py-3 px-4 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:from-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-opacity-50"
               >
-                {isLoggingIn ? (
-                  <div className="flex items-center gap-2">
-                    <Loader className="h-5 w-5 animate-spin" />
-                    <span>Signing In...</span>
-                  </div>
-                ) : (
-                  "Sign In"
-                )}
+                Sign In
               </Button>
             </form>
           </div>

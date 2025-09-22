@@ -19,6 +19,7 @@ const InitialPage = () => {
   const { data: session } = useSession();
 
   const userName = session?.user.name;
+  console.log("username", userName);
 
   useEffect(() => {
     const visited = localStorage.getItem("hasVisited");
@@ -28,10 +29,10 @@ const InitialPage = () => {
   const handleSplashFinish = () => {
     if (isVisit) {
       dispatch(setSplashStateState("onboarding"));
-    }
-
-    if (userName) {
-      router.push("/home");
+    } else if (userName) {
+      router.push("/dashboard");
+    } else {
+      router.push("/login");
     }
   };
 

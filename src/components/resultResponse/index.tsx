@@ -1,4 +1,4 @@
-import { Button } from "@/components";
+import { Button } from "@/components/base";
 import Link from "next/link";
 
 interface ResultResponseProps {
@@ -6,7 +6,7 @@ interface ResultResponseProps {
   title: string;
   description: string;
   redirect: string;
-  btnName: string 
+  btnName: string;
 }
 
 const ResultResponse = ({
@@ -14,7 +14,7 @@ const ResultResponse = ({
   title,
   description,
   redirect,
-  btnName
+  btnName,
 }: ResultResponseProps) => {
   return (
     <div className="h-screen lg:w-[450px] flex flex-col justify-center items-center gap-8 bg-white">
@@ -41,7 +41,6 @@ const ResultResponse = ({
           <Button>{btnName}</Button>
         </div>
       </Link>
-
     </div>
   );
 };

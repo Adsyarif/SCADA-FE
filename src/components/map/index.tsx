@@ -3,14 +3,12 @@ import type { LatLngExpression } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { CircleDot, MapPin } from 'lucide-react'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { MapContainerProps } from 'react-leaflet'
 
-const MapContainer = dynamic<{
-  center: LatLngExpression
-  zoom?: number
-  children: React.ReactNode
-  scrollWheelZoom?: boolean
-  style?: React.CSSProperties
-}>(() => import('react-leaflet').then((m) => m.MapContainer), { ssr: false })
+const MapContainer = dynamic<MapContainerProps>(
+  () => import('react-leaflet').then((m) => m.MapContainer),
+  { ssr: false }
+)
 const TileLayer = dynamic(() => import('react-leaflet').then((m) => m.TileLayer), { ssr: false })
 const Marker   = dynamic(() => import('react-leaflet').then((m) => m.Marker),   { ssr: false })
 const Circle   = dynamic(() => import('react-leaflet').then((m) => m.Circle),   { ssr: false })

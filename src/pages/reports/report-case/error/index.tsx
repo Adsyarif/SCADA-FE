@@ -1,4 +1,4 @@
-import ResultResponse from "@/components/resultResponse";
+import { ResultResponse } from "@/components";
 
 const ReportError = () => {
   return (

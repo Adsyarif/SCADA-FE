@@ -1,7 +1,6 @@
-// src/views/report-menu/components/ReportList.tsx
 import { useRouter } from "next/router";
 import { ChevronDown, User, Clock, BarChart3 } from "lucide-react";
-import { ReportListProps } from "@/types/report.types";
+import { ReportListProps } from "@/types/report/report.types";
 import {
   getStatusConfig,
   shorterMessage,
@@ -37,37 +36,37 @@ const ReportList = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 pb-5">
       {reports.map((report) => {
         const { time, date, day, fullDate } = formatDate(report.create_at);
         const statusConfig = getStatusConfig(report.status);
 
         return (
           <div
-            className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer active:scale-95"
+            className="bg-white flex flex-col gap-3 rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer active:scale-95"
             key={report.reportId}
             onClick={() => onClick(report.reportId)}
           >
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex flex-col items-center justify-center text-white">
+            <div
+              className={`flex justify-between items-center px-3 py-1 rounded-lg text-xs font-medium ${statusConfig.bg} ${statusConfig.text} ${statusConfig.border}`}
+            >
+              <h3 className="font-semibold text-gray-800 mb-1 text-base pt-1">
+                {report.reportCategory}
+              </h3>
+              {statusConfig.icon} {statusConfig.label}
+            </div>
+            <div className="flex items-start justify-between w-full mb-3">
+              <div className="flex gap-3 w-full">
+                <div className="min-w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex flex-col items-center justify-center text-white">
                   <span className="text-xs font-medium">{day}</span>
                   <span className="text-lg font-bold">{date}</span>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 text-base mb-1">
-                    {report.reportCategory}
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                <div className="overflow-x-hidden">
+                  <p className="text-gray-600 text-sm leading-relaxed overflow-x-hidden">
                     {shorterMessage(report.reportDescription)}
                   </p>
                 </div>
               </div>
-              <span
-                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${statusConfig.bg} ${statusConfig.text} ${statusConfig.border}`}
-              >
-                {statusConfig.icon} {statusConfig.label}
-              </span>
             </div>
 
             <div className="flex items-center justify-between text-sm text-gray-500">

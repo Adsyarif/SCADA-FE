@@ -1,4 +1,3 @@
-// src/views/report-menu/Report.tsx
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -18,7 +17,7 @@ import {
 } from "lucide-react";
 import { SkeletonReport, Title, SearchInput, ReportList } from "@/components";
 import { useReportFilters } from "@/hooks/report/useReportFilter";
-import { ReportListResponseDataInterface } from "@/types/report.types";
+import { ReportListResponseDataInterface } from "@/types/report/report.types";
 import { useListReport } from "@/views/report-menu/hooks";
 
 const Report = () => {
@@ -88,7 +87,6 @@ const Report = () => {
           />
 
           <div className="pt-6 px-5">
-            {/* Header Stats */}
             <div className="grid grid-cols-2 gap-3 mb-5">
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
                 <div className="flex items-center justify-between">
@@ -265,7 +263,6 @@ const Report = () => {
               </div>
             </div>
 
-            {/* Results Section */}
             <div className="min-h-[400px]">
               {error ? (
                 <div className="text-center py-12">

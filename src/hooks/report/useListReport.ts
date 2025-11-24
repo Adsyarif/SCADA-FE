@@ -1,6 +1,5 @@
-// src/views/report-menu/hooks/useListReport.ts
 import axiosInstance from "@/api/axiosClient";
-import { ReportListResponseProps } from "@/types/report.types";
+import { ReportListResponseProps } from "@/types/report/report.types";
 import { useQuery } from "@tanstack/react-query";
 
 export const useListReport = (userId: string) => {

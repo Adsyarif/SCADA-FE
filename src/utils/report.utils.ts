@@ -1,4 +1,4 @@
-import { StatusConfig } from "@/types/report.types";
+import { StatusConfig } from "@/types/report/report.types";
 
 export const getStatusConfig = (
   status: "PENDING" | "REJECTED" | "APPROVED" | "REVISION"
@@ -37,7 +37,7 @@ export const getStatusConfig = (
 };
 
 export const shorterMessage = (str: string): string => {
-  const maxChar = 80;
+  const maxChar = 67;
   return str.length > maxChar ? str.slice(0, maxChar) + "..." : str;
 };
 

@@ -1,4 +1,4 @@
-import { SearchInputProps } from "@/types/report.types";
+import { SearchInputProps } from "@/types/report/report.types";
 import { Search } from "lucide-react";
 
 const SearchInput = ({ searchText, setSearchText }: SearchInputProps) => (

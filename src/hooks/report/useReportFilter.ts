@@ -1,4 +1,4 @@
-import { ReportListResponseDataInterface } from "@/types/report.types";
+import { ReportListResponseDataInterface } from "@/types/report/report.types";
 import { useState, useMemo } from "react";
 
 interface UseReportFiltersProps {

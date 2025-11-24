@@ -165,7 +165,7 @@ const MobileLayout = ({
   ];
 
   const footerItems = [
-    { id: "home", href: "/home", icon: House, label: "Home" },
+    { id: "home", href: "/dashboard", icon: House, label: "Home" },
     {
       id: "monitoring",
       href: "/monitoring",

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { LucideArrowLeft, MapPin, Activity } from "lucide-react";
-import { TitleProps } from "@/types/report.types";
+import { TitleProps } from "@/types/report/report.types";
 
 const Title = ({ text, isButton, handleBackClick, backHref }: TitleProps) => {
   const router = useRouter();
